@@ -170,7 +170,28 @@ function App() {
             </nav>
 
             <div className="relative z-10 ml-auto flex items-center gap-2 md:ml-3">
-              {/* Mobile menu button */}
+              <button
+                type="button"
+                onClick={() => go('lojas')}
+                className={clsx(
+                  'inline-flex min-h-[48px] items-center justify-center rounded-full px-5',
+                  'bg-aurum-secondary-base text-aurum-primary-base',
+                  'text-[14px] font-bold uppercase tracking-[0.12em]',
+                  'shadow-[0_10px_22px_rgba(123,63,151,0.25)]',
+                  'cta-shine transition-all duration-300 ease-aurum hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(123,63,151,0.32)]',
+                )}
+              >
+                <img
+                  src={asset('/brand/ifood-logo.png')}
+                  alt=""
+                  className="mr-2 h-6 w-auto object-contain sm:h-7"
+                  loading="eager"
+                  decoding="async"
+                />
+                Peça agora
+              </button>
+
+              {/* Mobile menu button (right side) */}
               <button
                 type="button"
                 className={clsx(
@@ -232,27 +253,6 @@ function App() {
                   )}
                 </svg>
               </button>
-
-              <button
-                type="button"
-                onClick={() => go('lojas')}
-                className={clsx(
-                  'inline-flex min-h-[48px] items-center justify-center rounded-full px-5',
-                  'bg-aurum-secondary-base text-aurum-primary-base',
-                  'text-[14px] font-bold uppercase tracking-[0.12em]',
-                  'shadow-[0_10px_22px_rgba(123,63,151,0.25)]',
-                  'cta-shine transition-all duration-300 ease-aurum hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(123,63,151,0.32)]',
-                )}
-              >
-                <img
-                  src={asset('/brand/ifood-logo.png')}
-                  alt=""
-                  className="mr-2 h-6 w-auto object-contain sm:h-7"
-                  loading="eager"
-                  decoding="async"
-                />
-                Peça agora
-              </button>
             </div>
 
             {/* Mobile dropdown */}
@@ -269,7 +269,6 @@ function App() {
                   className={clsx(
                     'md:hidden absolute left-0 right-0 top-[calc(100%+10px)] z-[46]',
                     'rounded-[22px] border-2 border-aurum-secondary-base/40 bg-aurum-primary-base/95 backdrop-blur',
-                    'shadow-[0_18px_50px_rgba(0,0,0,0.18)]',
                     'overflow-hidden',
                   )}
                   role="menu"
