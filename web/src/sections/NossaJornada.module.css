@@ -1,0 +1,281 @@
+.section {
+  --dur-fast: 200ms;
+  --dur-slow: 300ms;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reduced {
+  --dur-fast: 0ms;
+  --dur-slow: 0ms;
+}
+
+.trackScroller {
+  scrollbar-width: none;
+}
+.trackScroller::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.track {
+  position: relative;
+  margin-inline: auto;
+  max-width: 980px;
+  padding-block: 18px 8px;
+}
+
+.trackLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  transform: translateY(-50%);
+  background: rgba(245, 200, 0, 0.35);
+}
+
+.trackFill {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 2px;
+  width: 100%;
+  transform-origin: left;
+  transform: translateY(-50%) scaleX(0);
+  background: #f5c800;
+  transition: transform var(--dur-slow) var(--ease);
+}
+
+.fillOn {
+  transform: translateY(-50%) scaleX(1);
+}
+
+.nodes {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  gap: 10px;
+}
+
+.nodeWrap {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+
+.nodeBtn {
+  height: 54px;
+  width: 54px;
+  border-radius: 999px;
+  border: 3px solid #f5c800;
+  background: #7b2fbe;
+  color: #f5c800;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  transition:
+    transform var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+  outline: none;
+}
+
+.nodeBtn:hover {
+  transform: scale(1.1);
+}
+
+.nodeBtn:focus-visible {
+  box-shadow: 0 0 0 4px rgba(245, 200, 0, 0.25);
+}
+
+.nodeActive {
+  background: #f5c800;
+  color: #3a259e;
+  transform: scale(1.15);
+}
+
+.nodeLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+.panelOuter {
+  display: grid;
+  justify-items: stretch;
+  transition:
+    max-height var(--dur-slow) var(--ease),
+    opacity var(--dur-slow) var(--ease);
+  overflow: hidden;
+  opacity: 0;
+  max-height: 0;
+}
+
+.panelOpen {
+  opacity: 1;
+  max-height: 900px;
+}
+
+.panelSwap {
+  transition:
+    opacity var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.panelClosing {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+.panelOpening {
+  opacity: 0;
+  transform: translateY(8px);
+  transition-duration: var(--dur-slow);
+}
+
+.panel {
+  margin-top: 18px;
+  background: #1a1240;
+  border: 1px solid rgba(245, 200, 0, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.panelMedia {
+  position: relative;
+}
+
+.panelImg {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.panelImgFrame {
+  padding: 14px 14px 0 14px;
+}
+
+.imgBadge {
+  position: absolute;
+  left: 22px;
+  bottom: 16px;
+  background: #f5c800;
+  color: #1a1240;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.panelBody {
+  padding: 18px 18px 20px 18px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: #f5c800;
+  color: #1a1240;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.title {
+  margin-top: 10px;
+  font-size: 22px;
+  line-height: 1.15;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.rule {
+  margin-top: 10px;
+  height: 3px;
+  width: 48px;
+  background: #f5c800;
+  border-radius: 3px;
+}
+
+.desc {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+@media (min-width: 640px) {
+  .nodes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .panel {
+    grid-template-columns: 1fr;
+  }
+  .panelImg {
+    height: 240px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .panel {
+    grid-template-columns: 40% 60%;
+    align-items: stretch;
+  }
+  .panelImg {
+    height: 280px;
+    border-radius: 12px;
+  }
+  .panelImgFrame {
+    padding: 18px;
+  }
+  .panelBody {
+    padding: 22px 24px 24px 0;
+  }
+  .title {
+    font-size: 28px;
+  }
+}
+
+/* Mobile (<640px): timeline vertical */
+@media (max-width: 639px) {
+  .track {
+    max-width: 520px;
+    padding-block: 8px 8px;
+  }
+
+  .trackLine,
+  .trackFill {
+    left: 50%;
+    right: auto;
+    width: 2px;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    transform: translateX(-50%) scaleY(0);
+    transform-origin: top;
+  }
+
+  .trackLine {
+    transform: translateX(-50%) scaleY(1);
+    background: rgba(245, 200, 0, 0.35);
+  }
+
+  .fillOn {
+    transform: translateX(-50%) scaleY(1);
+  }
+
+  .nodes {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding-block: 10px;
+  }
+}
+

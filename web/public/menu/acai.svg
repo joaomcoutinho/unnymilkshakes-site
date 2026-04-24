@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="cup" x1="160" y1="150" x2="360" y2="460" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#EDE7F7" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="acai" x1="170" y1="220" x2="360" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3A0B5A" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#7B2FBE" stop-opacity="0.75"/>
+    </linearGradient>
+    <filter id="s" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#000" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <g filter="url(#s)">
+    <path d="M188 150h136c18 0 32 14 32 32v24c0 10-8 18-18 18H174c-10 0-18-8-18-18v-24c0-18 14-32 32-32Z" fill="url(#cup)" stroke="#7B2FBE" stroke-width="10"/>
+    <path d="M174 224h164l26 192c3 24-13 46-37 50l-60 10c-8 1-16 1-24 0l-60-10c-24-4-40-26-37-50l26-192Z" fill="url(#cup)" stroke="#7B2FBE" stroke-width="10"/>
+    <path d="M190 244h132l18 140c2 14-8 26-22 28l-44 6c-12 2-24 2-36 0l-44-6c-14-2-24-14-22-28l18-140Z" fill="url(#acai)"/>
+    <path d="M218 236c10-18 28-30 48-30s38 12 48 30" stroke="#FFED00" stroke-width="14" stroke-linecap="round"/>
+    <circle cx="330" cy="206" r="8" fill="#FFED00"/>
+    <circle cx="304" cy="188" r="6" fill="#FFED00" opacity="0.9"/>
+    <ellipse cx="260" cy="494" rx="140" ry="16" fill="#000" opacity="0.12"/>
+  </g>
+</svg>
