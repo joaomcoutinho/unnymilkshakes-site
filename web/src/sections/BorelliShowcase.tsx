@@ -151,11 +151,11 @@ export function BorelliShowcase({
 
         {/* Mobile / Tablet: horizontal scroll (no expansion) */}
         <div className="mt-10 md:hidden">
-          <div className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2">
+          <div className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3">
             {safeItems.map((it) => (
               <div
                 key={it.title}
-                className="relative h-[320px] w-[82vw] max-w-[420px] snap-center overflow-hidden rounded-[24px]"
+                className="relative h-[360px] w-[88vw] max-w-[520px] snap-start overflow-hidden rounded-[24px]"
               >
                 <div
                   className={clsx(
@@ -166,7 +166,7 @@ export function BorelliShowcase({
                 />
                 <div className="absolute inset-0 bg-aurum-secondary-dark/30" />
                 <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-                  <div className="font-heading text-[24px] font-bold leading-tight tracking-tighter">
+                  <div className="font-heading text-[26px] font-bold leading-tight tracking-tighter">
                     {it.title}
                   </div>
                   <button

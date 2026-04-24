@@ -310,7 +310,7 @@ function App() {
 
         {/* BORELLI-STYLE SHOWCASE (expanding cards) — onda integrada no Hero */}
 
-        <div id="conheca-produtos" className="-mt-px bg-aurum-secondary-base">
+        <div id="conheca-produtos" className="bg-aurum-secondary-base">
           <BorelliShowcase
             title="Conheça nossos produtos"
             highlight="artesanais"
