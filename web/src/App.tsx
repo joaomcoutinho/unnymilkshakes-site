@@ -110,14 +110,7 @@ function App() {
               'shadow-[0_16px_40px_rgba(0,0,0,0.12)]',
             )}
           >
-            <div
-              className="pointer-events-none absolute inset-0 rounded-full"
-              style={{
-                background:
-                  'linear-gradient(90deg, rgba(123,63,151,0.16) 0%, rgba(255,237,0,0.12) 45%, rgba(123,63,151,0.10) 100%)',
-              }}
-              aria-hidden="true"
-            />
+
 
             <button
               type="button"
