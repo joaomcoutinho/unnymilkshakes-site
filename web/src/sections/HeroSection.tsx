@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { useEffect, useRef, useState } from 'react'
 import { useReducedMotionPref } from '../lib/useReducedMotionPref'
+import { asset } from '../lib/asset'
 
 /** Próxima seção (Borelli) — tom roxo AURUM */
 const WAVE_FILL = '#7B3F97'
@@ -146,7 +147,7 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
                   aria-hidden
                 />
                 <img
-                  src="/hero/hero-mascot.png"
+                  src={asset('/hero/hero-mascot.png')}
                   alt="Mascote UNNY"
                   className="relative mx-auto h-[min(50vh,320px)] w-auto max-w-full object-contain md:mx-0 md:mt-0 md:max-h-[min(95dvh,900px)] md:min-h-0 md:w-auto"
                   loading="eager"
@@ -173,7 +174,7 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
                   aria-hidden
                 />
                 <img
-                  src="/hero/hero-mascot.png"
+                  src={asset('/hero/hero-mascot.png')}
                   alt="Mascote UNNY"
                   className="relative -mt-3 mx-auto h-[min(50vh,320px)] w-auto max-w-full object-contain"
                   loading="eager"

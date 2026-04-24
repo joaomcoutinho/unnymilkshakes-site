@@ -9,6 +9,7 @@ import { AboutUsSection } from './sections/AboutUsSection'
 import { MenuSection } from './sections/MenuSection'
 import { borelliShowcaseItems, contact, franchise, stores } from './sections/data'
 import { TiltCard } from './components/TiltCard'
+import { asset } from './lib/asset'
 
 function useOnceInView<T extends Element>(threshold = 0.2) {
   const ref = useRef<T | null>(null)
@@ -33,7 +34,7 @@ function useOnceInView<T extends Element>(threshold = 0.2) {
 }
 
 function App() {
-  const logoSrc = '/brand/unny-logo.png'
+  const logoSrc = asset('/brand/unny-logo.png')
   const { ref: storesGridRef, inView: storesInView } = useOnceInView<HTMLDivElement>(0.2)
 
   useEffect(() => {
@@ -177,7 +178,7 @@ function App() {
                 )}
               >
                 <img
-                  src="/brand/ifood-logo.png"
+                  src={asset('/brand/ifood-logo.png')}
                   alt=""
                   className="mr-2 h-6 w-auto object-contain sm:h-7"
                   loading="eager"
@@ -300,7 +301,7 @@ function App() {
                           <span className="relative h-5 w-[34px]">
                             {/* base (bg amarelo): logo roxa */}
                             <img
-                              src="/brand/ifood-logo-purple.png"
+                              src={asset('/brand/ifood-logo-purple.png')}
                               alt=""
                               className="absolute inset-0 h-5 w-auto object-contain opacity-100 transition-opacity duration-200 ease-aurum group-hover/ifood:opacity-0"
                               loading="lazy"
@@ -308,7 +309,7 @@ function App() {
                             />
                             {/* hover (bg roxo): logo amarela */}
                             <img
-                              src="/brand/ifood-logo.png"
+                              src={asset('/brand/ifood-logo.png')}
                               alt=""
                               className="absolute inset-0 h-5 w-auto object-contain opacity-0 transition-opacity duration-200 ease-aurum group-hover/ifood:opacity-100"
                               loading="lazy"
