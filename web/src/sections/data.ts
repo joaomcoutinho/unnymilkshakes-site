@@ -1,3 +1,5 @@
+import { asset } from '../lib/asset'
+
 export const about = {
   title: 'Quem somos',
   lead:
@@ -180,27 +182,27 @@ export const flavors = [
 export const borelliShowcaseItems = [
   {
     title: 'Milk Shakes',
-    image: '/menu/milkshake-unny.png',
+    image: asset('/menu/milkshake-unny.png'),
     ctaLabel: 'Conheça',
   },
   {
     title: 'Sundaes',
-    image: '/showcase/sundae-showcase-v2.png',
+    image: asset('/showcase/sundae-showcase-v2.png'),
     ctaLabel: 'Conheça',
   },
   {
     title: 'Turbinados',
-    image: '/showcase/turbinado-showcase-v2.png',
+    image: asset('/showcase/turbinado-showcase-v2.png'),
     ctaLabel: 'Conheça',
   },
   {
     title: 'Cascões',
-    image: '/showcase/penultimo-showcase.png',
+    image: asset('/showcase/penultimo-showcase.png'),
     ctaLabel: 'Conheça',
   },
   {
     title: 'Cups',
-    image: '/showcase/cups-showcase-v2.png',
+    image: asset('/showcase/cups-showcase-v2.png'),
     ctaLabel: 'Conheça',
   },
 ]
