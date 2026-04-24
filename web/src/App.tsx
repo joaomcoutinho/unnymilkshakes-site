@@ -35,11 +35,22 @@ function useOnceInView<T extends Element>(threshold = 0.2) {
 
 function App() {
   const logoSrc = asset('/brand/unny-logo.png')
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { ref: storesGridRef, inView: storesInView } = useOnceInView<HTMLDivElement>(0.2)
 
   useEffect(() => {
     ensureLenis()
   }, [])
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return
+      setMobileMenuOpen(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [mobileMenuOpen])
 
   useEffect(() => {
     // Global scroll reveal: adiciona .reveal-on uma vez por elemento
@@ -159,6 +170,69 @@ function App() {
             </nav>
 
             <div className="relative z-10 ml-auto flex items-center gap-2 md:ml-3">
+              {/* Mobile menu button */}
+              <button
+                type="button"
+                className={clsx(
+                  'md:hidden',
+                  'inline-flex min-h-[48px] items-center justify-center rounded-full px-4',
+                  'border-2 border-aurum-secondary-base/30 bg-white/40 text-aurum-secondary-base backdrop-blur',
+                  'transition-all duration-300 ease-aurum hover:bg-white/55',
+                  'focus-visible:ring-2 focus-visible:ring-aurum-secondary-base/40',
+                )}
+                aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
+                aria-expanded={mobileMenuOpen}
+                aria-controls="mobile-header-menu"
+                onClick={() => setMobileMenuOpen((v) => !v)}
+              >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  {mobileMenuOpen ? (
+                    <>
+                      <path
+                        d="M6 6L18 18"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M18 6L6 18"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <path
+                        d="M4 7H20"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M4 12H20"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M4 17H20"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                      />
+                    </>
+                  )}
+                </svg>
+              </button>
+
               <button
                 type="button"
                 onClick={() => go('lojas')}
@@ -180,6 +254,54 @@ function App() {
                 Peça agora
               </button>
             </div>
+
+            {/* Mobile dropdown */}
+            {mobileMenuOpen ? (
+              <>
+                <button
+                  type="button"
+                  className="md:hidden fixed inset-0 z-[45] bg-black/20"
+                  aria-label="Fechar menu"
+                  onClick={() => setMobileMenuOpen(false)}
+                />
+                <div
+                  id="mobile-header-menu"
+                  className={clsx(
+                    'md:hidden absolute left-0 right-0 top-[calc(100%+10px)] z-[46]',
+                    'rounded-[22px] border-2 border-aurum-secondary-base/40 bg-aurum-primary-base/95 backdrop-blur',
+                    'shadow-[0_18px_50px_rgba(0,0,0,0.18)]',
+                    'overflow-hidden',
+                  )}
+                  role="menu"
+                >
+                  <div className="px-3 py-3">
+                    <div className="grid gap-2">
+                      {nav.map((n) => (
+                        <button
+                          key={n.id}
+                          type="button"
+                          role="menuitem"
+                          className={clsx(
+                            'w-full rounded-[16px] px-4 py-3 text-left font-semibold',
+                            'text-aurum-secondary-base',
+                            'border-2 border-aurum-secondary-base/15 bg-white/35',
+                            'transition-all duration-300 ease-aurum',
+                            'hover:bg-white/55 hover:border-aurum-secondary-base/30',
+                            'focus-visible:ring-2 focus-visible:ring-aurum-secondary-base/40',
+                          )}
+                          onClick={async () => {
+                            setMobileMenuOpen(false)
+                            await go(n.id)
+                          }}
+                        >
+                          {n.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : null}
           </div>
         </div>
       </header>
