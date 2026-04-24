@@ -6,4 +6,10 @@ export default defineConfig({
   plugins: [react()],
   // GitHub Pages project site (repo name as base path)
   base: '/unnymilkshakes-site/',
+  server: {
+    host: true,
+    port: 5173,
+    strictPort: true,
+    allowedHosts: true,
+  },
 })
