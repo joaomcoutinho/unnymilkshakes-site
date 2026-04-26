@@ -186,7 +186,7 @@ export function SobreNosSection({
                   'reveal group flex min-h-[88px] flex-col justify-center rounded-[18px] bg-unny-purple px-5 py-5',
                   'shadow-[0_10px_30px_rgba(123,47,190,0.20)]',
                   'transition-transform duration-200 ease-out will-change-transform',
-                  'hover:translate-y-[-4px] hover:scale-[1.02] hover:rotate-[-0.6deg]',
+                  '[@media(hover:hover)]:hover:translate-y-[-4px] [@media(hover:hover)]:hover:scale-[1.02] [@media(hover:hover)]:hover:rotate-[-0.6deg]',
                   'motion-reduce:transition-none motion-reduce:hover:transform-none',
                   active && 'anim-fade-up',
                 ].join(' ')}
@@ -203,7 +203,7 @@ export function SobreNosSection({
                       className={[
                         'text-[13px] font-semibold leading-snug tracking-tight',
                         'text-[rgba(245,200,0,0.75)] transition-all duration-200 ease-out',
-                        'group-hover:text-[rgba(245,200,0,0.92)] group-hover:translate-y-[-1px]',
+                        '[@media(hover:hover)]:group-hover:text-[rgba(245,200,0,0.92)] [@media(hover:hover)]:group-hover:translate-y-[-1px]',
                         'motion-reduce:transition-none',
                       ].join(' ')}
                     >
@@ -214,7 +214,7 @@ export function SobreNosSection({
                       className={[
                         'h-[2px] w-0 rounded-full bg-[rgba(245,200,0,0.75)]',
                         'transition-all duration-200 ease-out',
-                        'group-hover:w-6 group-hover:bg-[rgba(245,200,0,0.92)]',
+                        '[@media(hover:hover)]:group-hover:w-6 [@media(hover:hover)]:group-hover:bg-[rgba(245,200,0,0.92)]',
                         'motion-reduce:transition-none',
                       ].join(' ')}
                     />
@@ -228,7 +228,10 @@ export function SobreNosSection({
 
         {/* Sub-componente 2 — pull quote + foto */}
         <div className="mt-10 grid items-start gap-8 lg:mt-12 lg:grid-cols-12 lg:gap-10">
-          <div className="reveal lg:col-span-6" data-reveal="left">
+          <div
+            className="reveal mx-auto w-full max-w-[560px] px-2 text-center lg:col-span-6 lg:max-w-none lg:px-0 lg:text-left"
+            data-reveal="left"
+          >
             <div className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-unny-purple">{eyebrow}</div>
             <h2 className="mt-3 text-[34px] font-bold leading-tight tracking-tight text-unny-purple sm:text-[38px]">
               {heading}
@@ -242,7 +245,11 @@ export function SobreNosSection({
             <p className="mt-6 max-w-xl text-[15px] leading-[1.85] text-unny-purple/90 sm:text-[16px]">{body}</p>
           </div>
 
-          <figure className="reveal lg:col-span-6" data-reveal="right" data-reveal-delay="80">
+          <figure
+            className="reveal mx-auto w-full max-w-[560px] px-2 lg:col-span-6 lg:max-w-none lg:px-0"
+            data-reveal="right"
+            data-reveal-delay="80"
+          >
             <div className="relative overflow-hidden rounded-[16px] border-2 border-unny-purple/30 bg-white/20">
               <img
                 src={imageSrc}
