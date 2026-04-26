@@ -440,7 +440,14 @@ function FeaturedMilkShake({
               <img
                 src={item.imageSrc ?? '/menu/milkshake.png'}
                 alt=""
-                className="absolute inset-0 m-auto h-[128%] w-[128%] -translate-x-[6%] object-contain drop-shadow-[0_24px_56px_rgba(0,0,0,0.28)]"
+                className={clsx(
+                  'absolute inset-0 m-auto object-contain',
+                  // Mobile: mais “hero” e proporcional ao desktop
+                  'h-[155%] w-[155%] translate-x-[6%] translate-y-[2%]',
+                  // Desktop/tablet: mantém um pouco mais contido
+                  'md:h-[135%] md:w-[135%] md:translate-x-[0%] md:translate-y-[0%]',
+                  'drop-shadow-[0_24px_56px_rgba(0,0,0,0.28)]',
+                )}
                 loading="lazy"
                 decoding="async"
               />
