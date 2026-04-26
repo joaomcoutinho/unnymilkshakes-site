@@ -396,7 +396,7 @@ function FeaturedMilkShake({
           }}
         >
           {!open && (
-            <span className="pointer-events-none absolute bottom-4 right-5 z-10 text-[11px] font-bold uppercase tracking-[1.5px] text-[#FDE900] opacity-80">
+            <span className="pointer-events-none absolute bottom-4 right-5 z-20 text-[11px] font-bold uppercase tracking-[1.5px] text-[#FDE900] opacity-80">
               Ver detalhes ↓
             </span>
           )}
@@ -412,11 +412,11 @@ function FeaturedMilkShake({
                 </div>
 
                 {/* Mobile hero image (left, below subtitle) */}
-                <div className="relative mt-5 h-[150px] w-full md:hidden">
+                <div className="mt-5 md:hidden">
                   <img
                     src={item.imageSrc ?? '/menu/milkshake.png'}
                     alt=""
-                    className="absolute left-0 top-1/2 h-[165%] w-auto -translate-y-1/2 object-contain drop-shadow-[0_22px_54px_rgba(0,0,0,0.28)]"
+                    className="block h-[170px] w-auto max-w-full object-contain drop-shadow-[0_22px_54px_rgba(0,0,0,0.28)]"
                     loading="lazy"
                     decoding="async"
                   />
