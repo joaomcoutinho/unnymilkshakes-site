@@ -244,38 +244,33 @@
   }
 }
 
-/* Mobile (<640px): timeline vertical */
+/* Mobile (<640px): timeline horizontal (compact, swipeable) */
 @media (max-width: 639px) {
+  .trackScroller {
+    scroll-snap-type: x mandatory;
+  }
+
   .track {
-    max-width: 520px;
-    padding-block: 8px 8px;
-  }
-
-  .trackLine,
-  .trackFill {
-    left: 50%;
-    right: auto;
-    width: 2px;
-    height: 100%;
-    top: 0;
-    bottom: 0;
-    transform: translateX(-50%) scaleY(0);
-    transform-origin: top;
-  }
-
-  .trackLine {
-    transform: translateX(-50%) scaleY(1);
-    background: rgba(245, 200, 0, 0.35);
-  }
-
-  .fillOn {
-    transform: translateX(-50%) scaleY(1);
+    max-width: none;
+    padding-block: 14px 10px;
+    padding-inline: 6px;
   }
 
   .nodes {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding-block: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 18px;
+    padding-inline: 10px;
+    min-width: max-content;
+  }
+
+  .nodeWrap {
+    scroll-snap-align: center;
+  }
+
+  .nodeLabel {
+    max-width: 92px;
   }
 }
 

@@ -185,7 +185,7 @@ export function NossaJornada({
               <div
                 className={clsx(
                   styles.nodes,
-                  'min-w-[520px] sm:min-w-[720px] lg:min-w-0',
+                  'lg:min-w-0',
                 )}
                 role="list"
                 aria-label="Marcos da história"
