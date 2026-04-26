@@ -241,7 +241,7 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
             </button>
           </div>
 
-          <div className="mt-8 flex gap-4 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] md:grid md:grid-cols-3 md:gap-5 md:overflow-visible [&::-webkit-scrollbar]:hidden">
+          <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5">
             {[
               { k: '+55', v: 'Sabores', d: '0.9s' },
               { k: '300–500ml', v: 'Tamanhos', d: '1s' },
@@ -250,9 +250,10 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
               <div
                 key={s.k}
                 className={clsx(
-                  'min-w-[200px] shrink-0 rounded-[14px] border-[1.5px] border-[rgba(255,237,0,0.3)] px-5 py-3.5 opacity-0 md:min-w-0',
+                  'rounded-[14px] border-[1.5px] border-[rgba(255,237,0,0.3)] px-4 py-3.5 opacity-0',
                   'bg-[rgba(123,47,190,0.9)] backdrop-blur-[8px]',
                   'transition-[transform,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-[rgba(255,237,0,0.7)]',
+                  s.k === 'Franquia' && 'col-span-2 md:col-span-1',
                   anim && 'hero-anim-fade-up-sub',
                 )}
                 style={anim ? { animationDelay: s.d } : undefined}
