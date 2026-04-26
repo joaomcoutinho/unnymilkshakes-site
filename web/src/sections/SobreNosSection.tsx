@@ -229,7 +229,7 @@ export function SobreNosSection({
         {/* Sub-componente 2 — pull quote + foto */}
         <div className="mt-10 grid items-start gap-8 lg:mt-12 lg:grid-cols-12 lg:gap-10">
           <div
-            className="reveal mx-auto w-full max-w-[560px] px-2 text-center lg:col-span-6 lg:max-w-none lg:px-0 lg:text-left"
+            className="reveal mx-auto w-full max-w-[560px] px-3 text-center lg:col-span-6 lg:max-w-none lg:px-0 lg:text-left"
             data-reveal="left"
           >
             <div className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-unny-purple">{eyebrow}</div>
@@ -242,15 +242,17 @@ export function SobreNosSection({
               <footer className="mt-2 text-[12px] font-semibold text-unny-purple/65">{quoteAttribution}</footer>
             </blockquote>
 
-            <p className="mt-6 max-w-xl text-[15px] leading-[1.85] text-unny-purple/90 sm:text-[16px]">{body}</p>
+            <p className="mt-6 mx-auto max-w-xl text-[15px] leading-[1.85] text-unny-purple/90 sm:text-[16px] lg:mx-0">
+              {body}
+            </p>
           </div>
 
           <figure
-            className="reveal w-full px-3 lg:col-span-6 lg:px-0"
+            className="reveal mx-auto w-full max-w-[560px] px-3 lg:col-span-6 lg:max-w-none lg:px-0"
             data-reveal="right"
             data-reveal-delay="80"
           >
-            <div className="relative mx-auto w-full max-w-[560px] overflow-hidden rounded-[16px] border-2 border-unny-purple/30 bg-white/20 lg:max-w-none">
+            <div className="relative mx-auto w-full overflow-hidden rounded-[16px] border-2 border-unny-purple/30 bg-white/20">
               <img
                 src={imageSrc}
                 alt={imageAlt}
