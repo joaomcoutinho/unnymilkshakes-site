@@ -395,11 +395,6 @@ function FeaturedMilkShake({
             transitionTimingFunction: expandEase,
           }}
         >
-          {!open && (
-            <span className="pointer-events-none absolute bottom-4 right-5 z-10 text-[11px] font-bold uppercase tracking-[1.5px] text-[#FDE900] opacity-75">
-              Ver detalhes
-            </span>
-          )}
           <div className={clsx('grid md:grid-cols-2')} style={{ minHeight: closedH }}>
             {/* LEFT (sempre visível) */}
             <div className="relative z-10 flex flex-col justify-between bg-[#4A2480] px-7 py-7 md:px-10">
@@ -442,7 +437,7 @@ function FeaturedMilkShake({
               <img
                 src={item.imageSrc ?? '/menu/milkshake.png'}
                 alt=""
-                className="absolute inset-0 m-auto h-[98%] w-[98%] object-contain drop-shadow-[0_26px_60px_rgba(0,0,0,0.28)]"
+                className="absolute inset-0 m-auto h-[110%] w-[110%] object-contain drop-shadow-[0_24px_56px_rgba(0,0,0,0.28)]"
                 loading="lazy"
                 decoding="async"
               />
