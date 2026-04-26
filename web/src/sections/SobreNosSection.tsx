@@ -246,11 +246,11 @@ export function SobreNosSection({
           </div>
 
           <figure
-            className="reveal mx-auto w-full max-w-[560px] px-2 lg:col-span-6 lg:max-w-none lg:px-0"
+            className="reveal mx-auto flex w-full justify-center px-4 lg:col-span-6 lg:px-0"
             data-reveal="right"
             data-reveal-delay="80"
           >
-            <div className="relative overflow-hidden rounded-[16px] border-2 border-unny-purple/30 bg-white/20">
+            <div className="relative w-full max-w-[560px] overflow-hidden rounded-[16px] border-2 border-unny-purple/30 bg-white/20 lg:max-w-none">
               <img
                 src={imageSrc}
                 alt={imageAlt}
