@@ -259,10 +259,11 @@
   .nodes {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 18px;
     padding-inline: 10px;
-    min-width: max-content;
+    width: 100%;
+    min-width: 0;
   }
 
   .nodeWrap {
