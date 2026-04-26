@@ -246,7 +246,7 @@ export function SobreNosSection({
           </div>
 
           <figure
-            className="reveal w-full lg:col-span-6"
+            className="reveal w-full pr-3 lg:col-span-6 lg:pr-0"
             data-reveal="right"
             data-reveal-delay="80"
           >
