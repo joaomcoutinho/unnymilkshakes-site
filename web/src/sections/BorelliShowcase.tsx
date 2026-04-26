@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
 import { fadeInUp, motionEase, motionDur, staggerChildren } from '../lib/motion'
@@ -24,6 +24,40 @@ export function BorelliShowcase({
 
   const safeItems = useMemo(() => (items.length ? items : []), [items])
   const activeItem = safeItems[active]
+  const scrollerRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    // Mobile: atualiza o "active" conforme o snap/scroll (sem depender de hover)
+    const el = scrollerRef.current
+    if (!el) return
+    let raf = 0
+    const onScroll = () => {
+      window.cancelAnimationFrame(raf)
+      raf = window.requestAnimationFrame(() => {
+        const children = Array.from(el.children) as HTMLElement[]
+        if (!children.length) return
+        const center = el.scrollLeft + el.clientWidth / 2
+        let best = 0
+        let bestDist = Number.POSITIVE_INFINITY
+        for (let i = 0; i < children.length; i++) {
+          const c = children[i]
+          const cCenter = c.offsetLeft + c.clientWidth / 2
+          const d = Math.abs(cCenter - center)
+          if (d < bestDist) {
+            bestDist = d
+            best = i
+          }
+        }
+        setActive(best)
+      })
+    }
+    el.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => {
+      el.removeEventListener('scroll', onScroll)
+      window.cancelAnimationFrame(raf)
+    }
+  }, [])
 
   return (
     <section aria-label="Conheça nossos produtos artesanais">
@@ -46,7 +80,7 @@ export function BorelliShowcase({
         </motion.div>
 
         {/* Desktop interactive grid */}
-        <div className="mt-10 hidden md:block">
+        <div className="mt-10 hidden md:block [@media(hover:none)]:hidden [@media(pointer:coarse)]:hidden">
           <motion.div
             className="flex h-[420px] w-full overflow-hidden rounded-[28px]"
             initial="hidden"
@@ -150,12 +184,23 @@ export function BorelliShowcase({
         </div>
 
         {/* Mobile / Tablet: horizontal scroll (no expansion) */}
-        <div className="mt-10 md:hidden">
-          <div className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3">
-            {safeItems.map((it) => (
+        <div className="mt-10 md:hidden [@media(hover:none)]:block [@media(pointer:coarse)]:block">
+          <div
+            ref={scrollerRef}
+            className={clsx(
+              'no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3',
+              'scroll-px-4 overscroll-x-contain',
+              '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+            )}
+          >
+            {safeItems.map((it, idx) => (
               <div
                 key={it.title}
-                className="relative h-[360px] w-[88vw] max-w-[520px] snap-start overflow-hidden rounded-[24px]"
+                className={clsx(
+                  'relative h-[360px] w-[88vw] max-w-[520px] snap-center overflow-hidden rounded-[24px]',
+                  'shrink-0',
+                  idx === active && 'ring-2 ring-white/25',
+                )}
               >
                 <div
                   className={clsx(
@@ -172,12 +217,38 @@ export function BorelliShowcase({
                   <button
                     type="button"
                     className="mt-4 inline-flex items-center justify-center rounded-full bg-aurum-primary-base px-6 py-3 text-[14px] font-semibold text-aurum-secondary-base"
-                    onClick={() => onCta?.(it)}
+                    onClick={() => {
+                      setActive(idx)
+                      onCta?.(it)
+                    }}
                   >
                     {it.ctaLabel ?? 'Conheça'}
                   </button>
                 </div>
               </div>
+            ))}
+          </div>
+
+          {/* Dots (mobile) */}
+          <div className="mt-4 flex items-center justify-center gap-2">
+            {safeItems.map((it, idx) => (
+              <button
+                key={it.title}
+                type="button"
+                aria-label={`Ir para ${it.title}`}
+                className={clsx(
+                  'h-2.5 w-2.5 rounded-full transition-all duration-200 ease-aurum',
+                  idx === active ? 'bg-white' : 'bg-white/35 hover:bg-white/55',
+                )}
+                onClick={() => {
+                  const el = scrollerRef.current
+                  if (!el) return
+                  const child = el.children.item(idx) as HTMLElement | null
+                  if (!child) return
+                  child.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+                  setActive(idx)
+                }}
+              />
             ))}
           </div>
         </div>

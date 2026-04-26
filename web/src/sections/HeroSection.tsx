@@ -270,7 +270,7 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
 
       {/* Onda inferior — z acima do degradê, abaixo do conteúdo clicável em área segura */}
       <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 z-[3] leading-none"
+        className="pointer-events-none absolute bottom-[-1px] left-0 right-0 z-[3] leading-none"
         aria-hidden
       >
         <svg
