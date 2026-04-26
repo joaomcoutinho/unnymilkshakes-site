@@ -26,6 +26,15 @@ export function BorelliShowcase({
   const activeItem = safeItems[active]
   const scrollerRef = useRef<HTMLDivElement | null>(null)
 
+  const scrollToIndex = (idx: number) => {
+    const el = scrollerRef.current
+    if (!el) return
+    const child = el.children.item(idx) as HTMLElement | null
+    if (!child) return
+    child.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+    setActive(idx)
+  }
+
   useEffect(() => {
     // Mobile: atualiza o "active" conforme o snap/scroll (sem depender de hover)
     const el = scrollerRef.current
@@ -185,23 +194,29 @@ export function BorelliShowcase({
 
         {/* Mobile / Tablet: horizontal scroll (no expansion) */}
         <div className="mt-10 md:hidden [@media(hover:none)]:block [@media(pointer:coarse)]:block">
-          <div
-            ref={scrollerRef}
-            className={clsx(
-              'no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3',
-              'scroll-px-4 overscroll-x-contain',
-              '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-            )}
-          >
-            {safeItems.map((it, idx) => (
-              <div
-                key={it.title}
-                className={clsx(
-                  'relative h-[360px] w-[88vw] max-w-[520px] snap-center overflow-hidden rounded-[24px]',
-                  'shrink-0',
-                  idx === active && 'ring-2 ring-white/25',
-                )}
-              >
+          <div className="relative">
+            <div
+              ref={scrollerRef}
+              className={clsx(
+                'no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3',
+                'scroll-px-4 overscroll-x-contain',
+                '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+              )}
+            >
+              {safeItems.map((it, idx) => (
+                <motion.div
+                  key={it.title}
+                  className={clsx(
+                    'relative h-[360px] w-[88vw] max-w-[520px] snap-center overflow-hidden rounded-[24px]',
+                    'shrink-0',
+                    idx === active && 'ring-2 ring-white/25',
+                  )}
+                  initial={false}
+                  animate={{
+                    scale: idx === active ? 1 : 0.97,
+                  }}
+                  transition={{ duration: 0.28, ease: motionEase }}
+                >
                 <div
                   className={clsx(
                     'absolute inset-0 bg-cover bg-center',
@@ -211,22 +226,80 @@ export function BorelliShowcase({
                 />
                 <div className="absolute inset-0 bg-aurum-secondary-dark/30" />
                 <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-                  <div className="font-heading text-[26px] font-bold leading-tight tracking-tighter">
-                    {it.title}
-                  </div>
-                  <button
-                    type="button"
-                    className="mt-4 inline-flex items-center justify-center rounded-full bg-aurum-primary-base px-6 py-3 text-[14px] font-semibold text-aurum-secondary-base"
-                    onClick={() => {
-                      setActive(idx)
-                      onCta?.(it)
-                    }}
-                  >
-                    {it.ctaLabel ?? 'Conheça'}
-                  </button>
+                    <motion.div
+                      initial={false}
+                      animate={{
+                        y: idx === active ? 0 : 6,
+                        opacity: idx === active ? 1 : 0.92,
+                      }}
+                      transition={{ duration: 0.28, ease: motionEase }}
+                    >
+                      <div className="font-heading text-[26px] font-bold leading-tight tracking-tighter">
+                        {it.title}
+                      </div>
+                      <button
+                        type="button"
+                        className="mt-4 inline-flex items-center justify-center rounded-full bg-aurum-primary-base px-6 py-3 text-[14px] font-semibold text-aurum-secondary-base"
+                        onClick={() => {
+                          setActive(idx)
+                          onCta?.(it)
+                        }}
+                      >
+                        {it.ctaLabel ?? 'Conheça'}
+                      </button>
+                    </motion.div>
                 </div>
-              </div>
-            ))}
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Arrows (mobile) */}
+            <button
+              type="button"
+              aria-label="Anterior"
+              onClick={() => scrollToIndex(Math.max(0, active - 1))}
+              className={clsx(
+                'md:hidden absolute left-2 top-1/2 -translate-y-1/2',
+                'h-11 w-11 rounded-full',
+                'border-2 border-white/25 bg-aurum-primary-base/95 text-aurum-secondary-base',
+                'shadow-[0_10px_24px_rgba(0,0,0,0.18)] backdrop-blur',
+                'transition-transform duration-200 ease-aurum active:scale-95',
+                active === 0 && 'pointer-events-none opacity-40',
+              )}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M14.5 6L8.5 12L14.5 18"
+                  stroke="currentColor"
+                  strokeWidth="2.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Próximo"
+              onClick={() => scrollToIndex(Math.min(safeItems.length - 1, active + 1))}
+              className={clsx(
+                'md:hidden absolute right-2 top-1/2 -translate-y-1/2',
+                'h-11 w-11 rounded-full',
+                'border-2 border-white/25 bg-aurum-primary-base/95 text-aurum-secondary-base',
+                'shadow-[0_10px_24px_rgba(0,0,0,0.18)] backdrop-blur',
+                'transition-transform duration-200 ease-aurum active:scale-95',
+                active === safeItems.length - 1 && 'pointer-events-none opacity-40',
+              )}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M9.5 6L15.5 12L9.5 18"
+                  stroke="currentColor"
+                  strokeWidth="2.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
           </div>
 
           {/* Dots (mobile) */}
@@ -241,12 +314,7 @@ export function BorelliShowcase({
                   idx === active ? 'bg-white' : 'bg-white/35 hover:bg-white/55',
                 )}
                 onClick={() => {
-                  const el = scrollerRef.current
-                  if (!el) return
-                  const child = el.children.item(idx) as HTMLElement | null
-                  if (!child) return
-                  child.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
-                  setActive(idx)
+                  scrollToIndex(idx)
                 }}
               />
             ))}
