@@ -410,6 +410,17 @@ function FeaturedMilkShake({
                 <div className="mt-2 text-[14px] font-semibold leading-[1.6] text-white/80">
                   {SHORT_DESC[item.title] ?? ''}
                 </div>
+
+                {/* Mobile hero image (left, below subtitle) */}
+                <div className="relative mt-5 h-[150px] w-full md:hidden">
+                  <img
+                    src={item.imageSrc ?? '/menu/milkshake.png'}
+                    alt=""
+                    className="absolute left-0 top-1/2 h-[165%] w-auto -translate-y-1/2 object-contain drop-shadow-[0_22px_54px_rgba(0,0,0,0.28)]"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
               </div>
 
               <span className="sr-only">{labelForToggle(open)}</span>
@@ -418,7 +429,7 @@ function FeaturedMilkShake({
             {/* RIGHT — ilustração (permanece visível ao abrir) */}
             <div
               className={clsx(
-                'relative overflow-hidden',
+                'relative overflow-hidden max-md:hidden',
                 'transition-[max-height,opacity] duration-300 ease-in-out',
               )}
               style={{
@@ -442,10 +453,8 @@ function FeaturedMilkShake({
                 alt=""
                 className={clsx(
                   'absolute inset-0 m-auto object-contain',
-                  // Mobile: mais “hero” e proporcional ao desktop
-                  'h-[155%] w-[155%] translate-x-[6%] translate-y-[2%]',
                   // Desktop/tablet: mantém um pouco mais contido
-                  'md:h-[135%] md:w-[135%] md:translate-x-[0%] md:translate-y-[0%]',
+                  'h-[135%] w-[135%] translate-x-[0%] translate-y-[0%]',
                   'drop-shadow-[0_24px_56px_rgba(0,0,0,0.28)]',
                 )}
                 loading="lazy"
