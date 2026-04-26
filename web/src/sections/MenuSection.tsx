@@ -549,6 +549,9 @@ function MenuCard({
             <div className="mt-4 font-heading text-[20px] font-black leading-tight tracking-tighter text-white">
               {item.title}
             </div>
+            <div className="mt-1 text-[13px] font-semibold leading-[1.5] text-white/80">
+              {SHORT_DESC[item.title] ?? ''}
+            </div>
             <span className="sr-only">{labelForToggle(open)}</span>
           </div>
 
