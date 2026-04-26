@@ -395,6 +395,11 @@ function FeaturedMilkShake({
             transitionTimingFunction: expandEase,
           }}
         >
+          {!open && (
+            <span className="pointer-events-none absolute bottom-4 right-5 z-10 text-[11px] font-bold uppercase tracking-[1.5px] text-[#FDE900] opacity-80">
+              Ver detalhes ↓
+            </span>
+          )}
           <div className={clsx('grid md:grid-cols-2')} style={{ minHeight: closedH }}>
             {/* LEFT (sempre visível) */}
             <div className="relative z-10 flex flex-col justify-between bg-[#4A2480] px-7 py-7 md:px-10">
@@ -402,14 +407,9 @@ function FeaturedMilkShake({
                 <div className={clsx('font-heading text-[26px] font-black leading-tight tracking-tighter text-white md:text-[34px]', featInView && 'anim-badge-pulse')}>
                   {item.title}
                 </div>
-                <div className="mt-2 text-[14px] font-semibold leading-[1.6] text-white/80">
-                  {SHORT_DESC[item.title] ?? ''}
-                </div>
               </div>
 
-              <div className="mt-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#FDE900] opacity-75 transition-opacity duration-200 ease-in-out group-hover:opacity-100">
-                {labelForToggle(open)}
-              </div>
+              <span className="sr-only">{labelForToggle(open)}</span>
             </div>
 
             {/* RIGHT — ilustração (permanece visível ao abrir) */}
@@ -437,7 +437,7 @@ function FeaturedMilkShake({
               <img
                 src={item.imageSrc ?? '/menu/milkshake.png'}
                 alt=""
-                className="absolute inset-0 m-auto h-[110%] w-[110%] object-contain drop-shadow-[0_24px_56px_rgba(0,0,0,0.28)]"
+                className="absolute inset-0 m-auto h-[128%] w-[128%] -translate-x-[6%] object-contain drop-shadow-[0_24px_56px_rgba(0,0,0,0.28)]"
                 loading="lazy"
                 decoding="async"
               />
@@ -535,7 +535,7 @@ function MenuCard({
       >
         {!open && (
           <span className="pointer-events-none absolute bottom-4 right-5 z-10 text-[11px] font-bold uppercase tracking-[1.5px] text-[#FDE900] opacity-75">
-            Ver detalhes
+            Ver detalhes ↓
           </span>
         )}
         <div
@@ -546,9 +546,7 @@ function MenuCard({
             <div className="mt-4 font-heading text-[20px] font-black leading-tight tracking-tighter text-white">
               {item.title}
             </div>
-            <div className="mt-2 text-[11px] font-bold uppercase tracking-[1.5px] text-[#FDE900] opacity-75 transition-opacity duration-200 ease-in-out group-hover:opacity-100">
-              <span className="card-toggle-label">{labelForToggle(open)}</span>
-            </div>
+            <span className="sr-only">{labelForToggle(open)}</span>
           </div>
 
           <div className="relative h-[150px] w-[150px] shrink-0">
