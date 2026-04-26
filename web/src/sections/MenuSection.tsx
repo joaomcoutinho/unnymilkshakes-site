@@ -407,6 +407,9 @@ function FeaturedMilkShake({
                 <div className={clsx('font-heading text-[26px] font-black leading-tight tracking-tighter text-white md:text-[34px]', featInView && 'anim-badge-pulse')}>
                   {item.title}
                 </div>
+                <div className="mt-2 text-[14px] font-semibold leading-[1.6] text-white/80">
+                  {SHORT_DESC[item.title] ?? ''}
+                </div>
               </div>
 
               <span className="sr-only">{labelForToggle(open)}</span>
