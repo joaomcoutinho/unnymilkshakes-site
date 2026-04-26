@@ -260,7 +260,7 @@ export function BorelliShowcase({
               onClick={() => scrollToIndex(Math.max(0, active - 1))}
               className={clsx(
                 'md:hidden absolute left-2 top-1/2 -translate-y-1/2',
-                'h-11 w-11 rounded-full',
+                'flex h-11 w-11 items-center justify-center rounded-full',
                 'border-2 border-white/25 bg-aurum-primary-base/95 text-aurum-secondary-base',
                 'shadow-[0_10px_24px_rgba(0,0,0,0.18)] backdrop-blur',
                 'transition-transform duration-200 ease-aurum active:scale-95',
@@ -283,7 +283,7 @@ export function BorelliShowcase({
               onClick={() => scrollToIndex(Math.min(safeItems.length - 1, active + 1))}
               className={clsx(
                 'md:hidden absolute right-2 top-1/2 -translate-y-1/2',
-                'h-11 w-11 rounded-full',
+                'flex h-11 w-11 items-center justify-center rounded-full',
                 'border-2 border-white/25 bg-aurum-primary-base/95 text-aurum-secondary-base',
                 'shadow-[0_10px_24px_rgba(0,0,0,0.18)] backdrop-blur',
                 'transition-transform duration-200 ease-aurum active:scale-95',
