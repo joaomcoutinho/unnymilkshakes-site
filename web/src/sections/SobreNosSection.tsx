@@ -178,58 +178,59 @@ export function SobreNosSection({
             {resolvedMetrics.map((m, idx) => {
               const isOddLast = resolvedMetrics.length % 2 === 1 && idx === resolvedMetrics.length - 1
               return (
-              <article
-                key={m.id}
-                className={[
-                  isOddLast ? 'col-span-2' : 'col-span-1',
-                  'lg:col-span-1',
-                  'reveal group flex min-h-[88px] flex-col justify-center rounded-[18px] bg-unny-purple px-5 py-5',
-                  'shadow-[0_10px_30px_rgba(123,47,190,0.20)]',
-                  'transition-transform duration-200 ease-out will-change-transform',
-                  '[@media(hover:hover)]:hover:translate-y-[-4px] [@media(hover:hover)]:hover:scale-[1.02] [@media(hover:hover)]:hover:rotate-[-0.6deg]',
-                  'motion-reduce:transition-none motion-reduce:hover:transform-none',
-                  active && 'anim-fade-up',
-                ].join(' ')}
-                data-reveal="up"
-                aria-label={m.ariaLabel ?? m.label}
-                style={{ animationDelay: active ? `${idx * 0.08}s` : undefined }}
-              >
-                <div className="text-[28px] font-extrabold leading-none sm:text-[32px]" aria-live="polite" aria-atomic="true">
-                  <AnimatedMetricValue metric={m} active={active} durationMs={1800} />
-                </div>
-                {m.label ? (
-                  <div className="mt-2 inline-flex w-fit items-center gap-2">
-                    <span
-                      className={[
-                        'text-[13px] font-semibold leading-snug tracking-tight',
-                        'text-[rgba(245,200,0,0.75)] transition-all duration-200 ease-out',
-                        '[@media(hover:hover)]:group-hover:text-[rgba(245,200,0,0.92)] [@media(hover:hover)]:group-hover:translate-y-[-1px]',
-                        'motion-reduce:transition-none',
-                      ].join(' ')}
-                    >
-                      {m.label}
-                    </span>
-                    <span
-                      aria-hidden="true"
-                      className={[
-                        'h-[2px] w-0 rounded-full bg-[rgba(245,200,0,0.75)]',
-                        'transition-all duration-200 ease-out',
-                        '[@media(hover:hover)]:group-hover:w-6 [@media(hover:hover)]:group-hover:bg-[rgba(245,200,0,0.92)]',
-                        'motion-reduce:transition-none',
-                      ].join(' ')}
-                    />
+                <article
+                  key={m.id}
+                  className={[
+                    isOddLast ? 'col-span-2' : 'col-span-1',
+                    'lg:col-span-1',
+                    'reveal group flex min-h-[88px] flex-col justify-center rounded-[18px] bg-unny-purple px-5 py-5',
+                    'shadow-[0_10px_30px_rgba(123,47,190,0.20)]',
+                    'transition-transform duration-200 ease-out will-change-transform',
+                    '[@media(hover:hover)]:hover:translate-y-[-4px] [@media(hover:hover)]:hover:scale-[1.02] [@media(hover:hover)]:hover:rotate-[-0.6deg]',
+                    'motion-reduce:transition-none motion-reduce:hover:transform-none',
+                    active && 'anim-fade-up',
+                  ].join(' ')}
+                  data-reveal="up"
+                  aria-label={m.ariaLabel ?? m.label}
+                  style={{ animationDelay: active ? `${idx * 0.08}s` : undefined }}
+                >
+                  <div className="text-[28px] font-extrabold leading-none sm:text-[32px]" aria-live="polite" aria-atomic="true">
+                    <AnimatedMetricValue metric={m} active={active} durationMs={1800} />
                   </div>
-                ) : null}
-              </article>
+                  {m.label ? (
+                    <div className="mt-2 inline-flex w-fit items-center gap-2">
+                      <span
+                        className={[
+                          'text-[13px] font-semibold leading-snug tracking-tight',
+                          'text-[rgba(245,200,0,0.75)] transition-all duration-200 ease-out',
+                          '[@media(hover:hover)]:group-hover:text-[rgba(245,200,0,0.92)] [@media(hover:hover)]:group-hover:translate-y-[-1px]',
+                          'motion-reduce:transition-none',
+                        ].join(' ')}
+                      >
+                        {m.label}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className={[
+                          'h-[2px] w-0 rounded-full bg-[rgba(245,200,0,0.75)]',
+                          'transition-all duration-200 ease-out',
+                          '[@media(hover:hover)]:group-hover:w-6 [@media(hover:hover)]:group-hover:bg-[rgba(245,200,0,0.92)]',
+                          'motion-reduce:transition-none',
+                        ].join(' ')}
+                      />
+                    </div>
+                  ) : null}
+                </article>
               )
             })}
           </div>
         </div>
 
         {/* Sub-componente 2 — pull quote + foto */}
+        {/* Sub-componente 2 — pull quote + foto */}
         <div className="mt-10 grid items-start gap-8 lg:mt-12 lg:grid-cols-12 lg:gap-10">
           <div
-            className="reveal mx-auto w-full max-w-[560px] px-3 text-center lg:col-span-6 lg:max-w-none lg:px-0 lg:text-left"
+            className="reveal mx-auto w-full max-w-[600px] px-5 text-center lg:col-span-6 lg:max-w-none lg:mx-0 lg:px-0 lg:text-left"
             data-reveal="left"
           >
             <div className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-unny-purple">{eyebrow}</div>
@@ -248,11 +249,11 @@ export function SobreNosSection({
           </div>
 
           <figure
-            className="reveal mx-auto w-full max-w-[560px] px-3 lg:col-span-6 lg:max-w-none lg:px-0"
+            className="reveal mx-auto flex w-full max-w-[600px] justify-center px-5 lg:col-span-6 lg:max-w-none lg:mx-0 lg:px-0"
             data-reveal="right"
             data-reveal-delay="80"
           >
-            <div className="relative mx-auto w-full overflow-hidden rounded-[16px] border-2 border-unny-purple/30 bg-white/20">
+            <div className="relative w-full overflow-hidden rounded-[16px] border-2 border-unny-purple/30 bg-white/20">
               <img
                 src={imageSrc}
                 alt={imageAlt}
