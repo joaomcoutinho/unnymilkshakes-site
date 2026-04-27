@@ -172,8 +172,53 @@ export function SobreNosSection({
   return (
     <div className="relative overflow-hidden bg-aurum-primary-base">
       <div className="aurum-container relative py-14 sm:py-16 lg:py-20">
-        {/* Sub-componente 1 — métricas */}
-        <div ref={metricsRef}>
+        {/* Sub-componente 1 — pull quote + foto (história primeiro) */}
+        <div className="grid items-start gap-8 lg:grid-cols-12 lg:gap-10">
+          <div
+            className="reveal mx-auto w-full max-w-[600px] text-center lg:col-span-6 lg:max-w-none lg:mx-0 lg:text-left"
+            data-reveal="left"
+          >
+            <div className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-unny-purple">{eyebrow}</div>
+            <h2 className="mt-3 text-[34px] font-bold leading-tight tracking-tight text-unny-purple sm:text-[38px]">
+              {heading}
+            </h2>
+
+            <blockquote className="mt-6 rounded-[14px] border-l-[4px] border-l-unny-purple bg-unny-purple/10 px-5 py-4 text-unny-purple">
+              <p className="text-[16px] italic leading-relaxed">{quote}</p>
+              <footer className="mt-2 text-[12px] font-semibold text-unny-purple/65">{quoteAttribution}</footer>
+            </blockquote>
+
+            <p className="mt-6 mx-auto max-w-xl text-[15px] leading-[1.85] text-unny-purple/90 sm:text-[16px] lg:mx-0">
+              {body}
+            </p>
+          </div>
+
+          <figure
+            className="reveal mx-auto flex w-full max-w-[600px] justify-center lg:col-span-6 lg:max-w-none lg:mx-0"
+            data-reveal="right"
+            data-reveal-delay="80"
+          >
+            <div className="relative w-full overflow-hidden rounded-[16px] border-2 border-unny-purple/30 bg-white/20">
+              <img
+                src={imageSrc}
+                alt={imageAlt}
+                className="h-[320px] w-full object-cover object-center sm:h-[420px]"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption className="sr-only">{imageAlt}</figcaption>
+
+              <div className="pointer-events-none absolute bottom-4 left-4">
+                <span className="inline-flex items-center rounded-full bg-unny-purple px-4 py-2 text-[12px] font-extrabold tracking-tight text-[#F5C800]">
+                  Desde 2015 ✦
+                </span>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        {/* Sub-componente 2 — métricas (prova social) */}
+        <div ref={metricsRef} className="mt-10 lg:mt-12">
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
             {resolvedMetrics.map((m, idx) => {
               const isOddLast = resolvedMetrics.length % 2 === 1 && idx === resolvedMetrics.length - 1
@@ -224,52 +269,6 @@ export function SobreNosSection({
               )
             })}
           </div>
-        </div>
-
-        {/* Sub-componente 2 — pull quote + foto */}
-        {/* Sub-componente 2 — pull quote + foto */}
-        <div className="mt-10 grid items-start gap-8 lg:mt-12 lg:grid-cols-12 lg:gap-10">
-          <div
-            className="reveal mx-auto w-full max-w-[600px] px-5 text-center lg:col-span-6 lg:max-w-none lg:mx-0 lg:px-0 lg:text-left"
-            data-reveal="left"
-          >
-            <div className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-unny-purple">{eyebrow}</div>
-            <h2 className="mt-3 text-[34px] font-bold leading-tight tracking-tight text-unny-purple sm:text-[38px]">
-              {heading}
-            </h2>
-
-            <blockquote className="mt-6 rounded-[14px] border-l-[4px] border-l-unny-purple bg-unny-purple/10 px-5 py-4 text-unny-purple">
-              <p className="text-[16px] italic leading-relaxed">{quote}</p>
-              <footer className="mt-2 text-[12px] font-semibold text-unny-purple/65">{quoteAttribution}</footer>
-            </blockquote>
-
-            <p className="mt-6 mx-auto max-w-xl text-[15px] leading-[1.85] text-unny-purple/90 sm:text-[16px] lg:mx-0">
-              {body}
-            </p>
-          </div>
-
-          <figure
-            className="reveal mx-auto flex w-full max-w-[600px] justify-center px-5 lg:col-span-6 lg:max-w-none lg:mx-0 lg:px-0"
-            data-reveal="right"
-            data-reveal-delay="80"
-          >
-            <div className="relative w-full overflow-hidden rounded-[16px] border-2 border-unny-purple/30 bg-white/20">
-              <img
-                src={imageSrc}
-                alt={imageAlt}
-                className="h-[320px] w-full object-cover object-center sm:h-[420px]"
-                loading="lazy"
-                decoding="async"
-              />
-              <figcaption className="sr-only">{imageAlt}</figcaption>
-
-              <div className="pointer-events-none absolute bottom-4 left-4">
-                <span className="inline-flex items-center rounded-full bg-unny-purple px-4 py-2 text-[12px] font-extrabold tracking-tight text-[#F5C800]">
-                  Desde 2015 ✦
-                </span>
-              </div>
-            </div>
-          </figure>
         </div>
       </div>
     </div>

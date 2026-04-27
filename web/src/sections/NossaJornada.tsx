@@ -190,7 +190,7 @@ export function NossaJornada({
                 role="list"
                 aria-label="Marcos da história"
               >
-                {resolved.map((m) => {
+                {resolved.map((m, idx) => {
                   const isActive = (openId || selectedId) === m.id
                   const isOpen = openId === m.id
                   return (
@@ -202,7 +202,7 @@ export function NossaJornada({
                         aria-expanded={isOpen}
                         className={clsx(styles.nodeBtn, isActive && styles.nodeActive)}
                       >
-                        {m.year}
+                        {idx + 1}
                       </button>
                       <div className={styles.nodeLabel}>{m.date}</div>
                     </div>

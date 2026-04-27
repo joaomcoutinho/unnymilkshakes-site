@@ -48,7 +48,7 @@ export function AboutUsSection() {
       {/* 1) HERO — Conheça Nossa História */}
       <div className="relative">
         <SobreNosSection imageSrc={asset('/about/historia-hero.png')} />
-        <WaveDivider from="#FFED00" to="#7B3F97" />
+        <WaveDivider from="#FFED00" to="#7B2FBE" />
       </div>
 
       {/* 2) TIMELINE — Nossa Jornada */}

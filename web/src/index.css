@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800&family=Playfair+Display:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -10,9 +10,9 @@
   --brand-primary-light: #fff780;
   --brand-primary-dark: #ccbd00;
 
-  --brand-secondary-base: #7b3f97;
-  --brand-secondary-light: #a170b8;
-  --brand-secondary-dark: #5a2e6f;
+  --brand-secondary-base: #7b2fbe;
+  --brand-secondary-light: #a66fd9;
+  --brand-secondary-dark: #5a1a8a;
 
   --text-primary: #121212;
   --text-muted: #6b7280;
@@ -32,6 +32,16 @@ html {
 
 body {
   @apply bg-white text-aurum-text-primary font-heading tracking-tight;
+  /* Garante que o documento sempre tenha pelo menos 1px de overflow vertical em
+     mobile, eliminando o problema do "primeiro scroll absorvido" pela retração
+     da URL bar no iOS Safari quando o conteúdo cabe exatamente no viewport. */
+  min-height: calc(100svh + 1px);
+}
+
+@supports not (height: 100svh) {
+  body {
+    min-height: calc(100vh + 1px);
+  }
 }
 
 /* Hero / Mascot floating + soft pulse */
@@ -73,7 +83,7 @@ body {
 }
 
 .aurum-glass {
-  border: 1px solid rgba(123, 63, 151, 0.1);
+  border: 1px solid rgba(123, 47, 190, 0.1);
   background: rgba(248, 250, 252, 0.55);
   backdrop-filter: blur(10px);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -177,6 +187,13 @@ body {
 
 .reveal[data-reveal='right'] {
   transform: translateX(18px);
+}
+
+@media (max-width: 767px) {
+  .reveal[data-reveal='left'],
+  .reveal[data-reveal='right'] {
+    transform: translateY(18px);
+  }
 }
 
 .reveal-on {
@@ -359,6 +376,12 @@ body {
 
 .hero-cta-pulse {
   animation: heroCtaPulse 2.8s ease-in-out infinite;
+}
+
+@media (max-width: 767px) {
+  .hero-cta-pulse {
+    animation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

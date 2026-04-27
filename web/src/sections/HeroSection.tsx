@@ -4,7 +4,7 @@ import { useReducedMotionPref } from '../lib/useReducedMotionPref'
 import { asset } from '../lib/asset'
 
 /** Próxima seção (Borelli) — tom roxo AURUM */
-const WAVE_FILL = '#7B3F97'
+const WAVE_FILL = '#7B2FBE'
 
 /** Degradê roxo → amarelo, transição suave (interpolação em oklab no lugar do mix sRGB) */
 const gradientDesktop = 'linear-gradient(135deg in oklab, #7B2FBE, #FDE900)'
@@ -69,6 +69,10 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
   useEffect(() => {
     const el = rootRef.current
     if (!el || reducedMotion) return
+    // Mobile: parallax desligado (causa congestionamento de main thread no boot).
+    if (typeof window !== 'undefined' && window.matchMedia?.('(max-width: 767px)').matches) {
+      return
+    }
     let raf = 0
     const onScroll = () => {
       cancelAnimationFrame(raf)
@@ -92,16 +96,16 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
     <section
       ref={rootRef}
       data-no-auto-reveal
-      className="relative isolate min-h-[100dvh] overflow-x-hidden overflow-y-visible pb-[52px] pt-[88px] md:min-h-[100vh] md:pb-[96px]"
+      className="relative isolate min-h-[100lvh] touch-pan-y overflow-x-hidden overflow-y-visible pb-[52px] pt-[88px] md:min-h-[100vh] md:pb-[96px]"
     >
       {/* Camada 1 — apenas degradê (mascote = roxo / texto = amarelo) */}
       <div
-        className={clsx('absolute inset-0 z-[1] md:hidden', anim && 'hero-bg-fade')}
+        className={clsx('pointer-events-none absolute inset-0 z-[1] md:hidden', anim && 'hero-bg-fade')}
         style={{ backgroundImage: gradientMobile }}
         aria-hidden
       />
       <div
-        className={clsx('absolute inset-0 z-[1] hidden md:block', anim && 'hero-bg-fade')}
+        className={clsx('pointer-events-none absolute inset-0 z-[1] hidden md:block', anim && 'hero-bg-fade')}
         style={{ backgroundImage: gradientDesktop }}
         aria-hidden
       />

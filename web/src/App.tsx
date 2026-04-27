@@ -53,44 +53,70 @@ function App() {
   }, [mobileMenuOpen])
 
   useEffect(() => {
-    // Global scroll reveal: adiciona .reveal-on uma vez por elemento
-    // 1) Auto-tag de textos semânticos (para não precisar marcar manualmente)
-    const sectionCounters = new Map<Element, number>()
-    const textEls = Array.from(
-      document.querySelectorAll<HTMLElement>('main h1, main h2, main h3, main h4, main p, main li'),
-    )
-    for (const el of textEls) {
-      if (el.closest('[data-no-auto-reveal]')) continue
-      if (el.dataset.reveal) continue
-      // Evita animar textos dentro de botões/links (já têm microinterações próprias)
-      if (el.closest('a, button')) continue
-      el.classList.add('reveal')
-      el.dataset.reveal = 'up'
-      const group = el.closest('section') ?? el.parentElement ?? document.body
-      const i = sectionCounters.get(group) ?? 0
-      sectionCounters.set(group, i + 1)
-      const delay = Math.min(360, i * 80)
-      if (delay) el.dataset.revealDelay = String(delay)
+    let io: IntersectionObserver | null = null
+    let idleHandle: number | null = null
+    let timeoutHandle: number | null = null
+
+    const run = () => {
+      // Global scroll reveal: adiciona .reveal-on uma vez por elemento
+      // 1) Auto-tag de textos semânticos (para não precisar marcar manualmente)
+      const sectionCounters = new Map<Element, number>()
+      const textEls = Array.from(
+        document.querySelectorAll<HTMLElement>('main h1, main h2, main h3, main h4, main p, main li'),
+      )
+      for (const el of textEls) {
+        if (el.closest('[data-no-auto-reveal]')) continue
+        if (el.dataset.reveal) continue
+        // Evita animar textos dentro de botões/links (já têm microinterações próprias)
+        if (el.closest('a, button')) continue
+        el.classList.add('reveal')
+        el.dataset.reveal = 'up'
+        const group = el.closest('section') ?? el.parentElement ?? document.body
+        const i = sectionCounters.get(group) ?? 0
+        sectionCounters.set(group, i + 1)
+        const delay = Math.min(360, i * 80)
+        if (delay) el.dataset.revealDelay = String(delay)
+      }
+
+      // 2) Observa todos os elementos marcados para reveal
+      const els = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'))
+      if (!els.length) return
+      io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (!e.isIntersecting) continue
+            const el = e.target as HTMLElement
+            const d = el.dataset.revealDelay
+            if (d) el.style.setProperty('--reveal-delay', `${Number(d)}ms`)
+            el.classList.add('reveal-on')
+            io?.unobserve(el)
+          }
+        },
+        { threshold: 0.18 },
+      )
+      for (const el of els) io.observe(el)
     }
 
-    // 2) Observa todos os elementos marcados para reveal
-    const els = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'))
-    if (!els.length) return
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (!e.isIntersecting) continue
-          const el = e.target as HTMLElement
-          const d = el.dataset.revealDelay
-          if (d) el.style.setProperty('--reveal-delay', `${Number(d)}ms`)
-          el.classList.add('reveal-on')
-          io.unobserve(el)
-        }
-      },
-      { threshold: 0.18 },
-    )
-    for (const el of els) io.observe(el)
-    return () => io.disconnect()
+    // Defere a execução para depois do primeiro paint e idealmente para quando
+    // o navegador estiver ocioso, para não bloquear touch/scroll iniciais em mobile.
+    type IdleWindow = Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number
+      cancelIdleCallback?: (handle: number) => void
+    }
+    const w = window as IdleWindow
+    if (typeof w.requestIdleCallback === 'function') {
+      idleHandle = w.requestIdleCallback(run, { timeout: 1500 })
+    } else {
+      timeoutHandle = window.setTimeout(run, 200)
+    }
+
+    return () => {
+      if (idleHandle != null && typeof w.cancelIdleCallback === 'function') {
+        w.cancelIdleCallback(idleHandle)
+      }
+      if (timeoutHandle != null) window.clearTimeout(timeoutHandle)
+      io?.disconnect()
+    }
   }, [])
 
   const nav = useMemo(
@@ -320,13 +346,13 @@ function App() {
           />
         </div>
 
-        <WaveDivider from="#7B3F97" to="#FFED00" />
+        <WaveDivider from="#7B2FBE" to="#FFED00" />
 
         <AboutUsSection />
 
         {/* MENU (new dark grid) */}
         {/* Transition: Nossa Jornada (purple) -> Cardápio (yellow) */}
-        <WaveDivider from="#7B3F97" to="#FFED00" />
+        <WaveDivider from="#7B2FBE" to="#FFED00" />
         <MenuSection />
 
         {/* STORES */}
@@ -508,7 +534,7 @@ function App() {
         </section>
 
         {/* FRANCHISE (purple with wave + CTA contrast) */}
-        <WaveDivider from="#FFFFFF" to="#7B3F97" />
+        <WaveDivider from="#FFFFFF" to="#7B2FBE" />
         <section id="franquia" className="relative overflow-hidden bg-aurum-secondary-base">
           <div className="aurum-container py-16 sm:py-20">
             <div className="grid gap-10 md:grid-cols-12">
@@ -543,7 +569,7 @@ function App() {
               </div>
 
               <div
-                className="reveal md:col-span-6 mx-auto w-full max-w-[600px] px-5 md:max-w-none md:px-0"
+                className="reveal md:col-span-6 mx-auto w-full max-w-[600px] md:max-w-none"
                 data-reveal="right"
               >
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -572,7 +598,7 @@ function App() {
         </section>
 
         {/* CONTACT */}
-        <WaveDivider from="#7B3F97" to="#FFFFFF" />
+        <WaveDivider from="#7B2FBE" to="#FFFFFF" />
         <section id="contato" className="bg-white">
           <div className="aurum-container py-16 sm:py-20">
             <div className="grid gap-10 md:grid-cols-12">
