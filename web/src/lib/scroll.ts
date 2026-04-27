@@ -31,6 +31,17 @@ export function ensureLenis() {
 export async function scrollToId(id: string, opts?: { offset?: number }) {
   const el = document.getElementById(id)
   if (!el) return
+  const isTouch =
+    typeof window !== 'undefined' &&
+    (window.matchMedia?.('(pointer: coarse)').matches || window.matchMedia?.('(hover: none)').matches)
+
+  // On touch devices, prefer native scrolling to avoid any interference.
+  if (isTouch) {
+    const y = el.getBoundingClientRect().top + window.scrollY + (opts?.offset ?? -88)
+    window.scrollTo({ top: y, behavior: 'smooth' })
+    return
+  }
+
   const lenis = ensureLenis()
   lenis.scrollTo(el, {
     offset: opts?.offset ?? -88, // account for sticky header

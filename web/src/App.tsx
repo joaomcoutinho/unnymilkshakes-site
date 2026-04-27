@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { Button } from './components/Button'
 import { WaveDivider } from './components/WaveDivider'
-import { ensureLenis, scrollToId } from './lib/scroll'
+import { scrollToId } from './lib/scroll'
 import { BorelliShowcase } from './sections/BorelliShowcase'
 import { HeroSection } from './sections/HeroSection'
 import { AboutUsSection } from './sections/AboutUsSection'
@@ -38,9 +38,9 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { ref: storesGridRef, inView: storesInView } = useOnceInView<HTMLDivElement>(0.2)
 
-  useEffect(() => {
-    ensureLenis()
-  }, [])
+  // NOTE: We intentionally do NOT initialize Lenis on mount.
+  // On some mobile browsers it can interfere with native scrolling.
+  // Lenis is only created lazily when we need programmatic scroll.
 
   useEffect(() => {
     if (!mobileMenuOpen) return
