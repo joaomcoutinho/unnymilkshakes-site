@@ -512,14 +512,22 @@ function App() {
         <section id="franquia" className="relative overflow-hidden bg-aurum-secondary-base">
           <div className="aurum-container py-16 sm:py-20">
             <div className="grid gap-10 md:grid-cols-12">
-              <div className="reveal md:col-span-6" data-reveal="left">
-                <h2 className="font-heading text-[32px] font-extrabold leading-tight tracking-tighter text-aurum-primary-base sm:text-[40px]">
+              <div
+                className="reveal md:col-span-6 text-center md:text-left"
+                data-reveal="left"
+              >
+                <h2 className="font-heading text-[32px] font-bold leading-tight tracking-tighter text-aurum-primary-base sm:text-[40px]">
                   {franchise.title}
                 </h2>
-                <p className="mt-3 text-[16px] leading-[1.7] text-white/85">{franchise.lead}</p>
-                <p className="mt-3 text-[18px] leading-[1.6] text-white/85">{franchise.body}</p>
+                <div className="mx-auto mt-5 h-[3px] w-[56px] rounded-[3px] bg-aurum-primary-base md:mx-0" />
+                <p className="mx-auto mt-4 max-w-[58ch] text-[16px] leading-[1.75] text-white/85 md:mx-0">
+                  {franchise.lead}
+                </p>
+                <p className="mx-auto mt-4 max-w-[58ch] text-[16px] leading-[1.75] text-white/85 md:mx-0">
+                  {franchise.body}
+                </p>
 
-                <div className="mt-8 flex flex-wrap items-center gap-3">
+                <div className="mt-8 flex flex-wrap items-center justify-center gap-3 md:justify-start">
                   <Button size="lg" variant="secondary" onClick={() => go('contato')}>
                     {franchise.cta}
                   </Button>
