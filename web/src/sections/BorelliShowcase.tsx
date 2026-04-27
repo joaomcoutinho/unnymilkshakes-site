@@ -164,9 +164,9 @@ export function BorelliShowcase({
                         }}
                         className={clsx(
                           'mt-4 inline-flex items-center justify-center rounded-full',
-                          'bg-aurum-primary-base px-6 py-3 text-[14px] font-semibold text-aurum-secondary-base',
+                          'bg-aurum-secondary-base px-6 py-3 text-[14px] font-semibold text-aurum-primary-base',
                           'shadow-sm transition-all duration-300 ease-aurum',
-                          'hover:bg-aurum-primary-light hover:shadow-md hover:scale-[1.03]',
+                          'hover:bg-aurum-secondary-dark hover:shadow-md hover:scale-[1.03]',
                           'active:scale-[1.0]',
                         )}
                         initial={false}
@@ -239,7 +239,7 @@ export function BorelliShowcase({
                       </div>
                       <button
                         type="button"
-                        className="mt-4 inline-flex items-center justify-center rounded-full bg-aurum-primary-base px-6 py-3 text-[14px] font-semibold text-aurum-secondary-base"
+                    className="mt-4 inline-flex items-center justify-center rounded-full bg-aurum-secondary-base px-6 py-3 text-[14px] font-semibold text-aurum-primary-base"
                         onClick={() => {
                           setActive(idx)
                           onCta?.(it)
