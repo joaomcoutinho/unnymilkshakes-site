@@ -546,7 +546,7 @@ function App() {
                 className="reveal md:col-span-6 mx-auto w-full max-w-[600px] px-5 md:max-w-none md:px-0"
                 data-reveal="right"
               >
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {[
                     { k: 'Taxa de franquia', v: franchise.fee },
                     { k: 'Royalties', v: franchise.royalty },
@@ -555,7 +555,7 @@ function App() {
                   ].map((x) => (
                     <div
                       key={x.k}
-                      className="group rounded-aurum bg-white/10 p-5 text-center backdrop-blur transition-transform duration-200 ease-out hover:-translate-y-1 hover:scale-[1.01] md:text-left"
+                      className="group flex flex-col items-center justify-center rounded-aurum bg-white/10 p-5 text-center backdrop-blur transition-transform duration-200 ease-out hover:-translate-y-1 hover:scale-[1.01] md:items-start md:text-left"
                     >
                       <div className="text-[12px] font-semibold uppercase tracking-[0.18em] text-white/70">
                         {x.k}
