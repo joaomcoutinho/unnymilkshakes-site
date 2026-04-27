@@ -330,9 +330,9 @@ function App() {
         <MenuSection />
 
         {/* STORES */}
-        <WaveDivider from="#FFED00" to="#FFFFFF" />
-        {/* Overlap 2px to remove subtle 1px seam line */}
-        <section id="lojas" className="-mt-[2px] bg-white pt-[2px]">
+        {/* Overlap the wave into the next section to kill the 1px seam */}
+        <WaveDivider from="#FFED00" to="#FFFFFF" className="-mb-[6px]" />
+        <section id="lojas" className="bg-white">
           <div className="aurum-container py-16 sm:py-20">
             <div className="reveal" data-reveal="up">
               <h2 className="font-heading text-[32px] font-bold leading-tight tracking-tighter text-aurum-secondary-base sm:text-[40px]">
