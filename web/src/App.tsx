@@ -331,7 +331,8 @@ function App() {
 
         {/* STORES */}
         <WaveDivider from="#FFED00" to="#FFFFFF" />
-        <section id="lojas" className="bg-white">
+        {/* Overlap 2px to remove subtle 1px seam line */}
+        <section id="lojas" className="-mt-[2px] bg-white pt-[2px]">
           <div className="aurum-container py-16 sm:py-20">
             <div className="reveal" data-reveal="up">
               <h2 className="font-heading text-[32px] font-bold leading-tight tracking-tighter text-aurum-secondary-base sm:text-[40px]">
