@@ -32,16 +32,6 @@ html {
 
 body {
   @apply bg-white text-aurum-text-primary font-heading tracking-tight;
-  /* Garante que o documento sempre tenha pelo menos 1px de overflow vertical em
-     mobile, eliminando o problema do "primeiro scroll absorvido" pela retração
-     da URL bar no iOS Safari quando o conteúdo cabe exatamente no viewport. */
-  min-height: calc(100svh + 1px);
-}
-
-@supports not (height: 100svh) {
-  body {
-    min-height: calc(100vh + 1px);
-  }
 }
 
 /* Hero / Mascot floating + soft pulse */

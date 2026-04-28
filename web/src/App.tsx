@@ -54,8 +54,8 @@ function App() {
 
   useEffect(() => {
     let io: IntersectionObserver | null = null
-    let idleHandle: number | null = null
-    let timeoutHandle: number | null = null
+    let raf1 = 0
+    let raf2 = 0
 
     const run = () => {
       // Global scroll reveal: adiciona .reveal-on uma vez por elemento
@@ -94,27 +94,36 @@ function App() {
         },
         { threshold: 0.18 },
       )
-      for (const el of els) io.observe(el)
+
+      // Para elementos já visíveis na viewport no momento do tagging, aplica
+      // `.reveal-on` SINCRONAMENTE (no mesmo frame em que `.reveal` foi aplicada),
+      // evitando o flicker de 520ms da transição translateY(18px) -> translateY(0)
+      // que acontece quando o IntersectionObserver fira assíncrono no próximo tick.
+      const vh = window.innerHeight || document.documentElement.clientHeight || 0
+      for (const el of els) {
+        const rect = el.getBoundingClientRect()
+        const isAlreadyInViewport = rect.top < vh && rect.bottom > 0
+        if (isAlreadyInViewport) {
+          el.classList.add('reveal-on')
+        } else {
+          io.observe(el)
+        }
+      }
     }
 
-    // Defere a execução para depois do primeiro paint e idealmente para quando
-    // o navegador estiver ocioso, para não bloquear touch/scroll iniciais em mobile.
-    type IdleWindow = Window & {
-      requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number
-      cancelIdleCallback?: (handle: number) => void
-    }
-    const w = window as IdleWindow
-    if (typeof w.requestIdleCallback === 'function') {
-      idleHandle = w.requestIdleCallback(run, { timeout: 1500 })
-    } else {
-      timeoutHandle = window.setTimeout(run, 200)
-    }
+    // Dois rAF: corre após layout/paint do React, mas muito antes do idle (que podia
+    // disparar a meio do primeiro scroll e bloquear o main thread com o tagging reveal).
+    raf1 = window.requestAnimationFrame(() => {
+      raf1 = 0
+      raf2 = window.requestAnimationFrame(() => {
+        raf2 = 0
+        run()
+      })
+    })
 
     return () => {
-      if (idleHandle != null && typeof w.cancelIdleCallback === 'function') {
-        w.cancelIdleCallback(idleHandle)
-      }
-      if (timeoutHandle != null) window.clearTimeout(timeoutHandle)
+      if (raf1) window.cancelAnimationFrame(raf1)
+      if (raf2) window.cancelAnimationFrame(raf2)
       io?.disconnect()
     }
   }, [])
@@ -144,8 +153,9 @@ function App() {
             className={clsx(
               'relative flex w-full items-center gap-3 rounded-full px-3 py-2 sm:px-4',
               'border-2 border-aurum-secondary-base/80 bg-aurum-primary-base/90 backdrop-blur',
-              'shadow-[0_16px_40px_rgba(0,0,0,0.12)]',
+              !mobileMenuOpen && 'shadow-[0_16px_40px_rgba(0,0,0,0.12)]',
             )}
+            style={mobileMenuOpen ? { boxShadow: 'none' } : undefined}
           >
 
 
@@ -153,20 +163,25 @@ function App() {
               type="button"
               onClick={() => go('topo')}
               className={clsx(
-                'relative z-10 flex min-h-[44px] items-center gap-3 rounded-full px-2 py-2 text-left',
+                'relative z-[50] flex min-h-[44px] items-center gap-3 rounded-full px-2 py-2 text-left',
                 'transition-transform duration-300 ease-aurum hover:scale-[1.02]',
               )}
             >
               <img
                 src={logoSrc}
                 alt="UNNY Milk Shakes"
-                className="h-12 w-auto object-contain drop-shadow-[0_14px_26px_rgba(123,63,151,0.18)] sm:h-14"
+                className={clsx(
+                  'h-12 w-auto object-contain sm:h-14',
+                  mobileMenuOpen
+                    ? 'max-md:drop-shadow-none'
+                    : 'drop-shadow-[0_14px_26px_rgba(123,63,151,0.18)]',
+                )}
                 loading="eager"
                 decoding="async"
               />
             </button>
 
-            <nav className="relative z-10 ml-auto hidden items-center gap-1 md:flex">
+            <nav className="relative z-[50] ml-auto hidden items-center gap-1 md:flex">
               {nav.map((n) => (
                 <button
                   key={n.id}
@@ -195,7 +210,7 @@ function App() {
               ))}
             </nav>
 
-            <div className="relative z-10 ml-auto flex items-center gap-2 md:ml-3">
+            <div className="relative z-[50] ml-auto flex items-center gap-2 md:ml-3">
               <button
                 type="button"
                 onClick={() => go('lojas')}
@@ -203,8 +218,10 @@ function App() {
                   'inline-flex min-h-[48px] items-center justify-center rounded-full px-5',
                   'bg-aurum-secondary-base text-aurum-primary-base',
                   'text-[14px] font-bold uppercase tracking-[0.12em]',
-                  'shadow-[0_10px_22px_rgba(123,63,151,0.25)]',
-                  'cta-shine transition-all duration-300 ease-aurum hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(123,63,151,0.32)]',
+                  'cta-shine transition-all duration-300 ease-aurum hover:-translate-y-0.5',
+                  mobileMenuOpen
+                    ? 'max-md:shadow-none'
+                    : 'shadow-[0_10px_22px_rgba(123,63,151,0.25)] hover:shadow-[0_16px_32px_rgba(123,63,151,0.32)]',
                 )}
               >
                 <img
@@ -281,51 +298,43 @@ function App() {
               </button>
             </div>
 
-            {/* Mobile dropdown */}
+            {/* Mobile dropdown — sem overlay full-screen (evita escurecimento sobre o header). Fechar: ícone ou item. */}
             {mobileMenuOpen ? (
-              <>
-                <button
-                  type="button"
-                  className="md:hidden fixed inset-0 z-[45] bg-black/20"
-                  aria-label="Fechar menu"
-                  onClick={() => setMobileMenuOpen(false)}
-                />
-                <div
-                  id="mobile-header-menu"
-                  className={clsx(
-                    'md:hidden absolute left-0 right-0 top-[calc(100%+10px)] z-[46]',
-                    'rounded-[22px] border-2 border-aurum-secondary-base/40 bg-aurum-primary-base/95 backdrop-blur',
-                    'overflow-hidden',
-                  )}
-                  role="menu"
-                >
-                  <div className="px-3 py-3">
-                    <div className="grid gap-2">
-                      {nav.map((n) => (
-                        <button
-                          key={n.id}
-                          type="button"
-                          role="menuitem"
-                          className={clsx(
-                            'w-full rounded-[16px] px-4 py-3 text-left font-semibold',
-                            'text-aurum-secondary-base',
-                            'border-2 border-aurum-secondary-base/15 bg-white/35',
-                            'transition-all duration-300 ease-aurum',
-                            'hover:bg-white/55 hover:border-aurum-secondary-base/30',
-                            'focus-visible:ring-2 focus-visible:ring-aurum-secondary-base/40',
-                          )}
-                          onClick={async () => {
-                            setMobileMenuOpen(false)
-                            await go(n.id)
-                          }}
-                        >
-                          {n.label}
-                        </button>
-                      ))}
-                    </div>
+              <div
+                id="mobile-header-menu"
+                className={clsx(
+                  'md:hidden absolute left-0 right-0 top-[calc(100%+10px)] z-[55]',
+                  'rounded-[22px] border-2 border-aurum-secondary-base/40 bg-aurum-primary-base/95 backdrop-blur',
+                  'overflow-hidden',
+                )}
+                role="menu"
+              >
+                <div className="px-3 py-3">
+                  <div className="grid gap-2">
+                    {nav.map((n) => (
+                      <button
+                        key={n.id}
+                        type="button"
+                        role="menuitem"
+                        className={clsx(
+                          'w-full rounded-[16px] px-4 py-3 text-left font-semibold',
+                          'text-aurum-secondary-base',
+                          'border-2 border-aurum-secondary-base/15 bg-white/35',
+                          'transition-all duration-300 ease-aurum',
+                          'hover:bg-white/55 hover:border-aurum-secondary-base/30',
+                          'focus-visible:ring-2 focus-visible:ring-aurum-secondary-base/40',
+                        )}
+                        onClick={async () => {
+                          setMobileMenuOpen(false)
+                          await go(n.id)
+                        }}
+                      >
+                        {n.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
-              </>
+              </div>
             ) : null}
           </div>
         </div>
@@ -334,10 +343,7 @@ function App() {
       <main id="topo" className="pt-0">
         <HeroSection onCta={() => go('cardapio')} />
 
-        {/* BORELLI-STYLE SHOWCASE (expanding cards) — onda integrada no Hero */}
-
-        {/* Overlap 2px to kill the 1px seam line from the wave/aliasing */}
-        <div id="conheca-produtos" className="-mt-[2px] bg-aurum-secondary-base pt-[2px]">
+        <div id="conheca-produtos">
           <BorelliShowcase
             title="Conheça nossos produtos"
             highlight="artesanais"
@@ -358,7 +364,10 @@ function App() {
         {/* STORES */}
         {/* Overlap the wave into the next section to kill the 1px seam */}
         <WaveDivider from="#FFED00" to="#FFFFFF" className="-mb-[6px]" />
-        <section id="lojas" className="bg-white">
+        <section
+          id="lojas"
+          className="relative z-[1] -mt-1 border-t-[3px] border-[#ffffff] bg-[#ffffff] pt-1"
+        >
           <div className="aurum-container py-16 sm:py-20">
             <div className="reveal" data-reveal="up">
               <h2 className="font-heading text-[32px] font-bold leading-tight tracking-tighter text-aurum-secondary-base sm:text-[40px]">
@@ -535,7 +544,10 @@ function App() {
 
         {/* FRANCHISE (purple with wave + CTA contrast) */}
         <WaveDivider from="#FFFFFF" to="#7B2FBE" />
-        <section id="franquia" className="relative overflow-hidden bg-aurum-secondary-base">
+        <section
+          id="franquia"
+          className="relative z-[1] -mt-1 overflow-hidden border-t-[3px] border-[#7b2fbe] bg-[#7b2fbe] pt-1"
+        >
           <div className="aurum-container py-16 sm:py-20">
             <div className="grid gap-10 md:grid-cols-12">
               <div
@@ -554,16 +566,13 @@ function App() {
                 </p>
 
                 <div className="mt-8 flex flex-wrap items-center justify-center gap-3 md:justify-start">
-                  <Button size="lg" variant="secondary" onClick={() => go('contato')}>
-                    {franchise.cta}
-                  </Button>
                   <Button
                     size="lg"
-                    variant="ghost"
-                    className="text-aurum-primary-base hover:text-white"
+                    variant="secondary"
+                    className="max-md:px-7 max-md:py-3.5"
                     onClick={() => go('contato')}
                   >
-                    Falar com a equipe
+                    {franchise.cta}
                   </Button>
                 </div>
               </div>
@@ -599,7 +608,7 @@ function App() {
 
         {/* CONTACT */}
         <WaveDivider from="#7B2FBE" to="#FFFFFF" />
-        <section id="contato" className="bg-white">
+        <section id="contato" className="relative z-[1] -mt-[2px] bg-white pt-[2px]">
           <div className="aurum-container py-16 sm:py-20">
             <div className="grid gap-10 md:grid-cols-12">
               <div className="reveal md:col-span-5" data-reveal="left">

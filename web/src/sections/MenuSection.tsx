@@ -101,7 +101,7 @@ const menuItems: MenuItem[] = [
     badge: 'Clássicos',
     lines: ['Sabores: Baunilha | Chocolate | Misto'],
     imageQuery: 'ice-cream-cone',
-    imageSrc: asset('/menu/cardapio_casquinha_e_cascao.png'),
+    imageSrc: asset('/menu/casquinho-soft-500.png'),
     filter: 'Sorvetes',
     flipText: '🍦 Simples e irresistível. O clássico de sempre.',
   },
@@ -113,7 +113,7 @@ const menuItems: MenuItem[] = [
       'Caldas: Amora | Chocolate | Doce de Leite | Kiwi | Leite Condensado | Maracujá | Morango',
     ],
     imageQuery: 'soft-serve',
-    imageSrc: asset('/menu/cardapio_casquinha_e_cascao.png'),
+    imageSrc: asset('/menu/casquinho-soft-500.png'),
     filter: 'Sorvetes',
     flipText: '🍫 Perfeito pra qualquer hora do dia.',
   },
@@ -125,7 +125,7 @@ const menuItems: MenuItem[] = [
       'Caldas: Amora | Chocolate | Doce de Leite | Kiwi | Leite Condensado | Maracujá | Morango',
     ],
     imageQuery: 'sundae',
-    imageSrc: asset('/menu/sundae.png'),
+    imageSrc: asset('/menu/sundae-soft-500.png'),
     filter: 'Sobremesas',
     flipText: '🥄 Cremoso por dentro, delicioso por fora.',
   },
@@ -149,7 +149,7 @@ const menuItems: MenuItem[] = [
       'Caldas: Amora | Chocolate | Doce de Leite | Kiwi | Leite Condensado | Maracujá | Morango',
     ],
     imageQuery: 'ice-cream-sundae',
-    imageSrc: asset('/menu/cardapio_topsundae.png'),
+    imageSrc: asset('/menu/super-sundae-500.png'),
     filter: 'Sobremesas',
     flipText: '👑 O maior da família. Pra quem não se contenta.',
   },
@@ -247,7 +247,7 @@ export function MenuSection() {
     <section
       id="cardapio"
       ref={sectionRef}
-      className="relative overflow-hidden bg-aurum-primary-base text-unny-purple"
+      className="relative z-[1] -mt-1 overflow-hidden border-t-[3px] border-[#ffed00] bg-[#ffed00] pt-1 text-unny-purple"
     >
       <div className="aurum-container relative py-16 sm:py-20">
         <div className="reveal mx-auto max-w-3xl text-center sm:mx-0 sm:text-left" data-reveal="up">
@@ -429,10 +429,11 @@ function FeaturedMilkShake({
             {/* RIGHT — ilustração (permanece visível ao abrir) */}
             <div
               className={clsx(
-                'relative overflow-hidden max-md:hidden',
+                'relative flex items-center justify-center overflow-hidden max-md:hidden',
                 'transition-[max-height,opacity] duration-300 ease-in-out',
               )}
               style={{
+                minHeight: closedH,
                 maxHeight: closedH,
                 opacity: 1,
               }}
@@ -452,9 +453,7 @@ function FeaturedMilkShake({
                 src={item.imageSrc ?? '/menu/milkshake.png'}
                 alt=""
                 className={clsx(
-                  'absolute inset-0 m-auto object-contain',
-                  // Desktop/tablet: mantém um pouco mais contido
-                  'h-[135%] w-[135%] translate-x-[0%] translate-y-[0%]',
+                  'relative z-[1] h-full w-full max-h-full object-contain px-3 py-2',
                   'drop-shadow-[0_24px_56px_rgba(0,0,0,0.28)]',
                 )}
                 loading="lazy"
@@ -527,6 +526,8 @@ function MenuCard({
   }, [open, item.title])
 
   const closedH = 220
+  const sundaeMenuThumb = item.title === 'Sundae'
+  const zeradoMenuThumb = item.title === 'Zerado'
 
   return (
     <motion.article
@@ -571,14 +572,19 @@ function MenuCard({
             <span className="sr-only">{labelForToggle(open)}</span>
           </div>
 
-          <div className="relative h-[150px] w-[150px] shrink-0">
+          <div
+            className={clsx(
+              'relative shrink-0',
+              sundaeMenuThumb ? 'h-[182px] w-[182px]' : zeradoMenuThumb ? 'h-[142px] w-[142px]' : 'h-[150px] w-[150px]',
+            )}
+          >
             <img
               src={item.imageSrc ?? '/menu/casquinho.svg'}
               alt=""
               className={clsx(
                 'absolute inset-0 m-auto object-contain',
-                // Padronizado com base no card "Zerado"
-                'h-[110%] w-[110%]',
+                // Sundae: maior; Zerado: um pouco menor; resto: padrão
+                sundaeMenuThumb ? 'h-[113%] w-[113%]' : zeradoMenuThumb ? 'h-[106%] w-[106%]' : 'h-[110%] w-[110%]',
                 'drop-shadow-[0_18px_44px_rgba(0,0,0,0.28)]',
               )}
               loading="lazy"

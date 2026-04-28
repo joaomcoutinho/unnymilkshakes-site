@@ -170,7 +170,7 @@ export function SobreNosSection({
   const { ref: metricsRef, active } = useOnceInView<HTMLDivElement>(0.3)
 
   return (
-    <div className="relative overflow-hidden bg-aurum-primary-base">
+    <div className="relative overflow-hidden bg-[#ffed00]">
       <div className="aurum-container relative py-14 sm:py-16 lg:py-20">
         {/* Sub-componente 1 — pull quote + foto (história primeiro) */}
         <div className="grid items-start gap-8 lg:grid-cols-12 lg:gap-10">

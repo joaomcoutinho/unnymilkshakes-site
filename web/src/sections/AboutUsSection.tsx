@@ -45,8 +45,7 @@ export function AboutUsSection() {
 
   return (
     <section id="sobre-nos" className="bg-white">
-      {/* 1) HERO — Conheça Nossa História */}
-      <div className="relative">
+      <div className="relative border-t border-[#ffed00] bg-[#ffed00]">
         <SobreNosSection imageSrc={asset('/about/historia-hero.png')} />
         <WaveDivider from="#FFED00" to="#7B2FBE" />
       </div>

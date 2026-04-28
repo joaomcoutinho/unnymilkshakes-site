@@ -182,7 +182,7 @@ export const flavors = [
 export const borelliShowcaseItems = [
   {
     title: 'Milk Shakes',
-    image: asset('/menu/milkshake-unny.png'),
+    image: asset('/showcase/milkshake-showcase-v2.png'),
     ctaLabel: 'Conheça',
   },
   {
@@ -216,7 +216,7 @@ export const franchise = {
   royalty: '6% sobre faturamento bruto',
   investment: 'R$ 150.000,00 (médio, incluindo a taxa de franquia)',
   payback: '23 a 29 meses (prazo de retorno)',
-  cta: 'Quero receber os detalhes da franquia',
+  cta: 'Quero receber os dados da franquia',
 }
 
 export const contact = {

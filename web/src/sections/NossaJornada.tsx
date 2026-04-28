@@ -156,7 +156,10 @@ export function NossaJornada({
     <section
       id="nossa-jornada"
       ref={sectionRef}
-      className={clsx('relative overflow-hidden bg-aurum-secondary-base', motionClass)}
+      className={clsx(
+        'relative z-[1] -mt-1 overflow-hidden border-t-[3px] border-[#7b2fbe] bg-[#7b2fbe] pt-1',
+        motionClass,
+      )}
       aria-label="Nossa Jornada"
     >
       <div className="aurum-container py-16 sm:py-20">

@@ -3,6 +3,40 @@ import clsx from 'clsx'
 import { motion } from 'framer-motion'
 import { fadeInUp, motionEase, motionDur, staggerChildren } from '../lib/motion'
 
+/**
+ * Tamanho do fundo (foto) de cada card.
+ * - `X% auto` = largura em % do painel, altura proporcional (ex.: 86% auto).
+ * - Também podes usar `cover` ou `contain` (comportamento CSS padrão).
+ * Ajuste só aqui (uma linha por título). Títulos devem bater com `borelliShowcaseItems` em data.ts.
+ */
+const SHOWCASE_CARD_BG_SIZE: Record<string, string> = {
+  'Milk Shakes': '86% auto',
+  'Sundaes': '110% auto',
+  'Turbinados': '100% auto',
+  'Cascões': '100% auto',
+  'Cups': '100% auto',
+}
+
+function showcaseBgSizeFor(title: string): string {
+  return SHOWCASE_CARD_BG_SIZE[title] ?? '100% auto'
+}
+
+/**
+ * Zoom da foto de fundo no hover (desktop), via Framer Motion `scale` quando o card está ativo.
+ * 1 = sem zoom; 1.06 = +6% (padrão dos outros cards). Aumenta aqui só o Milk Shakes se quiseres mais “pop”.
+ */
+const SHOWCASE_HOVER_BG_SCALE: Record<string, number> = {
+  'Milk Shakes': 1.6,
+  'Sundaes': 1.06,
+  'Turbinados': 1.06,
+  'Cascões': 1.06,
+  'Cups': 1.06,
+}
+
+function showcaseHoverBgScale(title: string): number {
+  return SHOWCASE_HOVER_BG_SCALE[title] ?? 1.06
+}
+
 type ShowcaseItem = {
   title: string
   image: string
@@ -69,7 +103,10 @@ export function BorelliShowcase({
   }, [])
 
   return (
-    <section aria-label="Conheça nossos produtos artesanais">
+    <section
+      aria-label="Conheça nossos produtos artesanais"
+      className="relative z-[1] -mt-1 border-t-[3px] border-[#7b2fbe] bg-[#7b2fbe] pt-1"
+    >
       {/* Title block (centered) */}
       <div className="aurum-container py-16 sm:py-20">
         <motion.div
@@ -102,6 +139,9 @@ export function BorelliShowcase({
           >
             {safeItems.map((it, idx) => {
               const isActive = idx === active
+              // Milk Shakes: coluna expande menos no hover (flex); zoom da foto = SHOWCASE_HOVER_BG_SCALE.
+              const activeFlexGrow = idx === 0 ? 1.58 : 3.2
+              const activeBgScale = showcaseHoverBgScale(it.title)
               return (
                 <motion.article
                   key={it.title}
@@ -116,18 +156,21 @@ export function BorelliShowcase({
                   onMouseEnter={() => setActive(idx)}
                   onFocus={() => setActive(idx)}
                   onClick={() => setActive(idx)}
-                  animate={{ flexGrow: isActive ? 3.2 : 1.1 }}
+                  animate={{ flexGrow: isActive ? activeFlexGrow : 1.1 }}
                   transition={{ duration: 0.42, ease: motionEase }}
                   style={{ flexBasis: 0 }}
                 >
                   {/* Background image (GPU-friendly scale) */}
                   <motion.div
                     className={clsx(
-                      'absolute inset-0 bg-cover bg-center will-change-transform',
+                      'absolute inset-0 bg-center will-change-transform bg-no-repeat',
                       'bg-aurum-primary-base',
                     )}
-                    style={{ backgroundImage: `url(${it.image})` }}
-                    animate={{ scale: isActive ? 1.06 : 1.0 }}
+                    style={{
+                      backgroundImage: `url(${it.image})`,
+                      backgroundSize: showcaseBgSizeFor(it.title),
+                    }}
+                    animate={{ scale: isActive ? activeBgScale : 1.0 }}
                     transition={{ duration: 0.42, ease: motionEase }}
                   />
 
@@ -219,10 +262,13 @@ export function BorelliShowcase({
                 >
                 <div
                   className={clsx(
-                    'absolute inset-0 bg-cover bg-center',
+                    'absolute inset-0 bg-center bg-no-repeat',
                     'bg-aurum-primary-base',
                   )}
-                  style={{ backgroundImage: `url(${it.image})` }}
+                  style={{
+                    backgroundImage: `url(${it.image})`,
+                    backgroundSize: showcaseBgSizeFor(it.title),
+                  }}
                 />
                 <div className="absolute inset-0 bg-aurum-secondary-dark/30" />
                 <div className="absolute inset-x-0 bottom-0 p-6 text-white">

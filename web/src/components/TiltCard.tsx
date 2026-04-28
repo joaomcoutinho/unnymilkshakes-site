@@ -19,7 +19,15 @@ export function TiltCard({
   const reduced = useReducedMotionPref()
   const ref = useRef<HTMLDivElement | null>(null)
   const raf = useRef<number | null>(null)
-  const state = useRef({ rx: 0, ry: 0, tx: 0, ty: 0, g: 0 })
+  const state = useRef({
+    rx: 0,
+    ry: 0,
+    tx: 0,
+    ty: 0,
+    /** Centro do glare em px relativos ao card; null = usar fallback 50% no CSS */
+    glx: null as number | null,
+    gly: null as number | null,
+  })
 
   const isCoarsePointer = useMemo(() => {
     if (typeof window === 'undefined') return true
@@ -35,12 +43,15 @@ export function TiltCard({
 
     const apply = () => {
       raf.current = null
-      const { rx, ry, tx, ty, g } = state.current
+      const { rx, ry, tx, ty, glx, gly } = state.current
       el.style.setProperty('--rx', `${rx}deg`)
       el.style.setProperty('--ry', `${ry}deg`)
       el.style.setProperty('--tx', `${tx}px`)
       el.style.setProperty('--ty', `${ty}px`)
-      el.style.setProperty('--gl', `${g}`)
+      if (glx != null && gly != null) {
+        el.style.setProperty('--glx', `${glx}px`)
+        el.style.setProperty('--gly', `${gly}px`)
+      }
     }
 
     const onMove = (e: PointerEvent) => {
@@ -54,19 +65,29 @@ export function TiltCard({
       state.current.rx = clamp(-dy * strength, -strength, strength)
       state.current.tx = clamp(dx * 6, -6, 6)
       state.current.ty = clamp(dy * 6, -6, 6)
-      state.current.g = clamp(px * 100, 0, 100)
+      state.current.glx = e.clientX - r.left
+      state.current.gly = e.clientY - r.top
 
       if (!raf.current) raf.current = requestAnimationFrame(apply)
     }
 
     const onLeave = () => {
-      state.current = { rx: 0, ry: 0, tx: 0, ty: 0, g: 0 }
+      state.current.rx = 0
+      state.current.ry = 0
+      state.current.tx = 0
+      state.current.ty = 0
+      state.current.glx = null
+      state.current.gly = null
+      el.style.removeProperty('--glx')
+      el.style.removeProperty('--gly')
       if (!raf.current) raf.current = requestAnimationFrame(apply)
     }
 
+    el.addEventListener('pointerenter', onMove)
     el.addEventListener('pointermove', onMove)
     el.addEventListener('pointerleave', onLeave)
     return () => {
+      el.removeEventListener('pointerenter', onMove)
       el.removeEventListener('pointermove', onMove)
       el.removeEventListener('pointerleave', onLeave)
       if (raf.current) cancelAnimationFrame(raf.current)
@@ -87,7 +108,11 @@ export function TiltCard({
       {glare ? (
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 ease-out [background:radial-gradient(circle_at_calc(var(--gl,50)*1%)_20%,rgba(255,255,255,0.20),transparent_45%)] group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100"
+          style={{
+            background:
+              'radial-gradient(circle at var(--glx, 50%) var(--gly, 50%), rgba(255,255,255,0.20), transparent 45%)',
+          }}
         />
       ) : null}
       {children}

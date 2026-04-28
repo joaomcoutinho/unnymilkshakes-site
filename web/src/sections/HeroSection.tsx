@@ -48,7 +48,6 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
   const rootRef = useRef<HTMLElement | null>(null)
   const [anim, setAnim] = useState(false)
   const reducedMotion = useReducedMotionPref()
-  const [parallax, setParallax] = useState(0)
 
   useEffect(() => {
     const el = rootRef.current
@@ -80,14 +79,16 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
         const r = el.getBoundingClientRect()
         const vh = window.innerHeight || 1
         const center = r.top + r.height * 0.5
-        const t = (center - vh * 0.5) / vh
-        setParallax(Math.max(-1, Math.min(1, t)))
+        const t = Math.max(-1, Math.min(1, (center - vh * 0.5) / vh))
+        el.style.setProperty('--hero-parallax', String(t))
       })
     }
+    el.style.setProperty('--hero-parallax', '0')
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => {
       cancelAnimationFrame(raf)
+      el.style.removeProperty('--hero-parallax')
       window.removeEventListener('scroll', onScroll)
     }
   }, [reducedMotion])
@@ -96,7 +97,7 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
     <section
       ref={rootRef}
       data-no-auto-reveal
-      className="relative isolate min-h-[100lvh] touch-pan-y overflow-x-hidden overflow-y-visible pb-[52px] pt-[88px] md:min-h-[100vh] md:pb-[96px]"
+      className="relative isolate min-h-[100dvh] touch-pan-y overflow-x-hidden overflow-y-visible pt-[88px] md:min-h-[100vh]"
     >
       {/* Camada 1 — apenas degradê (mascote = roxo / texto = amarelo) */}
       <div
@@ -114,7 +115,7 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
       <HeroDecorDesktop />
 
       {/* Camada 4 — conteúdo */}
-      <div className="relative z-[4] mx-auto flex w-full max-w-6xl flex-col px-6 pb-4 pt-10 md:min-h-[calc(100vh-88px)] md:flex-row md:items-stretch md:pb-8 md:pt-12 lg:pt-16">
+      <div className="relative z-[4] mx-auto flex w-full max-w-6xl flex-col px-6 pb-[52px] pt-10 md:min-h-[calc(100vh-88px)] md:flex-row md:items-stretch md:pb-[96px] md:pt-12 lg:pt-16">
         {/* Mascote (desktop): centralizado no meio exato da metade esquerda da viewport */}
         <div className="pointer-events-none absolute inset-y-0 left-0 z-[3] hidden w-1/2 items-center justify-center overflow-visible md:flex">
           <div
@@ -122,7 +123,11 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
               'relative flex w-full max-w-[520px] justify-center',
               anim && 'hero-anim-slide-left',
             )}
-            style={reducedMotion ? undefined : { transform: `translate3d(0, ${parallax * 10}px, 0)` }}
+            style={
+              reducedMotion
+                ? undefined
+                : { transform: 'translate3d(0, calc(var(--hero-parallax, 0) * 10px), 0)' }
+            }
           >
             <div className="hero-mascot-float relative z-10 w-[85%] max-w-[340px] md:ml-0 md:mr-[20px] md:w-auto md:max-w-none">
               {/* Escala a partir da base: personagem maior sem “subir” o ponto de apoio no hero */}
@@ -144,7 +149,8 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
                           opacity: anim ? 0.18 : 0,
                           background: 'radial-gradient(circle, rgba(253,233,0,0.55), transparent 60%)',
                           filter: 'blur(10px)',
-                          transform: `translate3d(-50%, -50%, 0) scale(${1 + Math.abs(parallax) * 0.08})`,
+                          transform:
+                            'translate3d(-50%, -50%, 0) scale(calc(1 + abs(var(--hero-parallax, 0)) * 0.08))',
                           transition: 'opacity 600ms cubic-bezier(0.22,1,0.36,1)',
                         }
                   }
@@ -272,11 +278,8 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
         </div>
       </div>
 
-      {/* Onda inferior — z acima do degradê, abaixo do conteúdo clicável em área segura */}
-      <div
-        className="pointer-events-none absolute bottom-[-1px] left-0 right-0 z-[3] leading-none"
-        aria-hidden
-      >
+      {/* Onda inferior no fluxo (não absolute): evita desalinhamento layout vs pintura e “salto” no scroll. */}
+      <div className="pointer-events-none relative z-[3] w-full leading-none" aria-hidden>
         <svg
           className="block h-[50px] w-full md:h-[90px]"
           viewBox="0 0 1440 90"
@@ -286,6 +289,7 @@ export function HeroSection({ onCta }: { onCta: () => void }) {
             d="M0,50 C360,100 720,0 1080,50 C1260,75 1380,30 1440,50 L1440,90 L0,90 Z"
             fill={WAVE_FILL}
           />
+          <rect x="0" y="86" width="1440" height="4" fill={WAVE_FILL} />
         </svg>
       </div>
     </section>
